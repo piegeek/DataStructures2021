@@ -1,7 +1,6 @@
 # HW#1: Deque
 
 * **Due date: Mar 31st, 2021, 11:59PM**
-* TA: Seonghyun Park (shpark95@snu.ac.kr)
 
 ## Goals
 
@@ -240,9 +239,9 @@ $ cmake ../
 $ make
 $ ls tests/deque_test
 ./test/deque_test
-$ ./tests/deque_test
+$ valgrind ./tests/deque_test
 [...]
-$ ./tests/palindrome_test
+$ valgrind ./tests/palindrome_test
 [...]
 ```
 
@@ -253,6 +252,9 @@ If you've all done correctly, the output will look like:
 All tests passed (XX assertions in XX test cases)
 
 ```
+
+If your code pass all tests **without memory leaks**, then you will get the perfect score!
+
 
 ### Submission
 
