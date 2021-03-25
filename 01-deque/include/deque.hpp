@@ -70,52 +70,103 @@ ArrayDeque<T>::ArrayDeque() :
 template <typename T>
 void ArrayDeque<T>::push_front(const T& item) {
     // TODO
+    if (front == back) {
+        resize();
+    }
+    
+    arr[front] = item;
+    front = (front - 1) % capacity_;
+    size_++;
 }
 
 template <typename T>
 void ArrayDeque<T>::push_back(const T& item) {
     // TODO
+    if (front == back) {
+        resize();
+    }
+
+    arr[back] = item;
+    back = (back + 1) % capacity_; 
+    size_++;
 }
 
 template <typename T>
 std::optional<T> ArrayDeque<T>::remove_front() {
     // TODO
-    return std::nullopt;
+    if (empty()) {
+        return std::nullopt;
+    }
+
+    T val = arr[(front + 1) % capacity_];
+    front = (front + 1) % capacity_;
+    size_--;
+
+    return val;
 }
 
 template <typename T>
 std::optional<T> ArrayDeque<T>::remove_back() {
     // TODO
-    return std::nullopt;
+    if (empty()) {
+        return std::nullopt;
+    }
+
+    T val = arr[(back - 1) % capacity_];
+    back = (back - 1) % capacity_;
+    size_--;
+
+    return val;
 }
 
 template <typename T>
 void ArrayDeque<T>::resize() {
     // TODO
+    // Allocate new memory
+    // std::unique_ptr new_arr = std::make_unique<T[]>(capacity_ * 2);
+    T* new_arr = new T[capacity_ * 2];
+
+    // Copy from front to end of arr
+    for (size_t i = front; i < capacity_; i++) {
+        new_arr[capacity_ + i] = arr[i];
+    }
+
+    // Copy from start of arr to back
+    for (size_t i = 0; i < back; i++) {
+        new_arr[i] = arr[i];
+    }
+    
+    // Update member variables;
+    front += capacity_;
+    capacity_ *= 2;
+
+    // Update arr to new_arr
+    arr.reset(new_arr);
 }
 
 template <typename T>
 bool ArrayDeque<T>::empty() {
     // TODO
-    return false;
+    return size_ == 0;
 }
 
 template <typename T>
 size_t ArrayDeque<T>::size() {
     // TODO
-    return 0;
+    return size_;
 }
 
 template <typename T>
 size_t ArrayDeque<T>::capacity() {
     // TODO
-    return 0;
+    return capacity_;
 }
 
 template <typename T>
 T& ArrayDeque<T>::operator[](size_t idx) {
     // TODO
-    return *new T{};
+    size_t internal_idx = (front + 1 + idx) % capacity_;
+    return arr[internal_idx];
 }
 
 template<typename T>
@@ -157,41 +208,85 @@ ListDeque<T>::ListDeque() : sentinel(new ListNode<T>{}), size_(0) {}
 template<typename T>
 void ListDeque<T>::push_front(const T& t) {
     // TODO
+    ListNode<T>* new_node = new ListNode<T>(t);
+    
+    new_node->next = sentinel->next;
+    new_node->prev = sentinel;
+
+    sentinel->next->prev = new_node;
+    sentinel->next = new_node;
+
+    size_++;
 }
 
 template<typename T>
 void ListDeque<T>::push_back(const T& t) {
     // TODO
+    ListNode<T>* new_node = new ListNode<T>(t);
+
+    new_node->next = sentinel;
+    new_node->prev = sentinel->prev;
+
+    sentinel->prev->next = new_node;
+    sentinel->prev = new_node;
+
+    size_++;
 }
 
 template<typename T>
 std::optional<T> ListDeque<T>::remove_front() {
     // TODO
-    return std::nullopt;
+    if (empty()) return std::nullopt;
+
+    std::optional<T> val = sentinel->next->value;
+
+    sentinel->next->next->prev = sentinel;
+    sentinel->next = sentinel->next->next;
+
+    size_--;
+
+    return val;
 }
 
 template<typename T>
 std::optional<T> ListDeque<T>::remove_back() {
     // TODO
-    return std::nullopt;
+    if (empty()) return std::nullopt;
+
+    std::optional<T> val = sentinel->prev->value;
+
+    sentinel->prev->prev->next = sentinel;
+    sentinel->prev = sentinel->prev->prev;
+
+    size_--;
+
+    return val;
 }
 
 template<typename T>
 bool ListDeque<T>::empty() {
     // TODO
-    return false;
+    return size_ == 0;
 }
 
 template<typename T>
 size_t ListDeque<T>::size() {
     // TODO
-    return 0;
+    return size_;
 }
 
 template<typename T>
 T& ListDeque<T>::operator[](size_t idx) {
     // TODO
-    return *new T{};
+    ListNode<T>* np = sentinel->next;
+    size_t count = 0;
+
+    while (count != idx && np != sentinel) {
+        np = np->next;
+        count++;
+    }
+
+    return np->value.value();
 }
 
 template<typename T>

@@ -15,7 +15,20 @@ private:
 template<typename Deque>
 bool Palindrome<Deque>::is_palindrome(const std::string& s1) {
     // TODO
-    return false;
+    // Store every character in the string in the deque
+    for (auto &c : s1) {
+        deque.push_back(c);
+    }
+
+    // Pop each character stored in deque and match it with the string
+    size_t size_of_deque = deque.size();
+
+    for (size_t i = 0; i < size_of_deque; i++) {
+        auto c = deque.remove_back();
+        if (c != s1[i]) return false;
+    }
+
+    return true;
 }
 
 template<typename Deque>
