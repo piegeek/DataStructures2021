@@ -311,11 +311,12 @@ std::ostream& operator<<(std::ostream& os, const ListDeque<T>& l) {
 template<typename T>
 ListDeque<T>::~ListDeque() {
     // TODO
-    auto np = sentinel->next->next;
+    auto np = sentinel->next;
     
     while (np != sentinel) {
-        delete np->prev;
-        np = np->next;
+        auto temp = np->next;
+        delete np;
+        np = temp;
     }
 
     delete sentinel;
