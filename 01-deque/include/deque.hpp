@@ -244,6 +244,8 @@ std::optional<T> ListDeque<T>::remove_front() {
     sentinel->next = sentinel->next->next;
 
     size_--;
+    
+    delete sentinel->next;
 
     return val;
 }
@@ -259,6 +261,8 @@ std::optional<T> ListDeque<T>::remove_back() {
     sentinel->prev = sentinel->prev->prev;
 
     size_--;
+
+    delete sentinel->prev;
 
     return val;
 }
