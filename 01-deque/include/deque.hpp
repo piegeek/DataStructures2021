@@ -238,14 +238,15 @@ std::optional<T> ListDeque<T>::remove_front() {
     // TODO
     if (empty()) return std::nullopt;
 
+    auto to_delete = sentinel->next;
     std::optional<T> val = sentinel->next->value;
 
-    sentinel->next = sentinel->next->next;
+    sentinel->next = to_delete->next;
     sentinel->next->next->prev = sentinel;
 
     size_--;
     
-    delete sentinel->next;
+    delete to_delete;
 
     return val;
 }
@@ -255,14 +256,15 @@ std::optional<T> ListDeque<T>::remove_back() {
     // TODO
     if (empty()) return std::nullopt;
 
+    auto to_delete = sentinel->prev;
     std::optional<T> val = sentinel->prev->value;
 
     sentinel->prev->prev->next = sentinel;
-    sentinel->prev = sentinel->prev->prev;
+    sentinel->prev = to_delete->prev;
 
     size_--;
 
-    delete sentinel->prev;
+    delete to_delete;
 
     return val;
 }
