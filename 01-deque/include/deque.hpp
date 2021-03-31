@@ -210,8 +210,8 @@ void ListDeque<T>::push_front(const T& t) {
     // TODO
     ListNode<T>* new_node = new ListNode<T>(t);
     
-    new_node->prev = sentinel;
     new_node->next = sentinel->next;
+    new_node->prev = sentinel;
 
     sentinel->next->prev = new_node;
     sentinel->next = new_node;
@@ -240,8 +240,8 @@ std::optional<T> ListDeque<T>::remove_front() {
 
     std::optional<T> val = sentinel->next->value;
 
-    sentinel->next = sentinel->next->next;
     sentinel->next->next->prev = sentinel;
+    sentinel->next = sentinel->next->next;
 
     size_--;
     
