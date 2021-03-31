@@ -210,8 +210,8 @@ void ListDeque<T>::push_front(const T& t) {
     // TODO
     ListNode<T>* new_node = new ListNode<T>(t);
     
-    new_node->next = sentinel->next;
     new_node->prev = sentinel;
+    new_node->next = sentinel->next;
 
     sentinel->next->prev = new_node;
     sentinel->next = new_node;
@@ -224,8 +224,8 @@ void ListDeque<T>::push_back(const T& t) {
     // TODO
     ListNode<T>* new_node = new ListNode<T>(t);
 
-    new_node->next = sentinel;
     new_node->prev = sentinel->prev;
+    new_node->next = sentinel;
 
     sentinel->prev->next = new_node;
     sentinel->prev = new_node;
@@ -240,8 +240,8 @@ std::optional<T> ListDeque<T>::remove_front() {
 
     std::optional<T> val = sentinel->next->value;
 
-    sentinel->next->next->prev = sentinel;
     sentinel->next = sentinel->next->next;
+    sentinel->next->next->prev = sentinel;
 
     size_--;
     
@@ -315,10 +315,10 @@ std::ostream& operator<<(std::ostream& os, const ListDeque<T>& l) {
 template<typename T>
 ListDeque<T>::~ListDeque() {
     // TODO
-    ListNode<T>* np = sentinel->prev;
+    ListNode<T>* np = sentinel->next;
     
     while (np != sentinel) {
-        ListNode<T>* temp = np->prev;
+        ListNode<T>* temp = np->next;
         delete np;
         np = temp;
     }
