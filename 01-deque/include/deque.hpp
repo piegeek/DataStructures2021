@@ -240,8 +240,8 @@ std::optional<T> ListDeque<T>::remove_front() {
 
     std::optional<T> val = sentinel->next->value;
 
-    sentinel->next->next->prev = sentinel;
     sentinel->next = sentinel->next->next;
+    sentinel->next->next->prev = sentinel;
 
     size_--;
     
