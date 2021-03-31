@@ -282,18 +282,12 @@ size_t ListDeque<T>::size() {
 template<typename T>
 T& ListDeque<T>::operator[](size_t idx) {
     // TODO
-    // ListNode<T>* np = sentinel->next;
-    // size_t count = 0;
+    ListNode<T>* np = sentinel->next;
+    size_t count = 0;
 
-    // while (count != idx && np != sentinel) {
-    //     np = np->next;
-    //     count++;
-    // }
-
-    ListNode<T>* np = sentinel;
-
-    for (int i = 0; i < (int)idx + 1; i++) {
+    while (count != idx && np != sentinel) {
         np = np->next;
+        count++;
     }
 
     return np->value.value();
@@ -321,10 +315,10 @@ std::ostream& operator<<(std::ostream& os, const ListDeque<T>& l) {
 template<typename T>
 ListDeque<T>::~ListDeque() {
     // TODO
-    ListNode<T>* np = sentinel->next;
+    ListNode<T>* np = sentinel->prev;
     
     while (np != sentinel) {
-        ListNode<T>* temp = np->next;
+        ListNode<T>* temp = np->prev;
         delete np;
         np = temp;
     }
