@@ -81,6 +81,7 @@ pointer to a root node. Then `TreeNode` implements each node, which
 has two pointers (one for left and the other for the right children)
 
 ![](http://cslibrary.stanford.edu/110/binarytree.gif)
+
 (please click the figure if you're using dark theme)
 
 This figure is from http://cslibrary.stanford.edu/110/BinaryTrees.html
