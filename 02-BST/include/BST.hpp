@@ -39,6 +39,8 @@ struct BST
         bool search(std::unique_ptr<TreeNode<T>>& t, const T& key);
         bool remove(std::unique_ptr<TreeNode<T>>& t, const T& key);
 
+        // you can define find_right_most_key function
+
 };
 
 template <typename T>
