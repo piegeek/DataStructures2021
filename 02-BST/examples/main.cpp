@@ -4,6 +4,16 @@
 
 #include "BST.hpp"
 
+template <typename T>
+void print_bst(BST<T>& bt) {
+    print_tree_node(bt.root);
+}
+
+template <typename T>
+void print_tree_node(std::unique_ptr<TreeNode<T>> t) {
+
+}
+
 int main() {
 
     BST<int> bt;
