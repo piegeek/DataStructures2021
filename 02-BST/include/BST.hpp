@@ -141,4 +141,48 @@ bool BST<T>::remove(std::unique_ptr<TreeNode<T>>& t, const T& key) {
     // TODO
     // if key does not exist in tree, return false
     // otherwise, return true
+
+    // Empty tree
+    if (t == nullptr) return false;
+
+    // Extract value
+    T val = t->element;
+
+    // Traverse down and search
+    if      (key < val) return remove(t->left,  key);
+    else if (key > val) return remove(t->right, key);
+    
+    // Match found
+    else {
+        // Is leaf node
+        if (t->left == nullptr && t->right == nullptr) {
+            t.reset(nullptr);
+        }
+        // Has only left child
+        else if (t->left != nullptr && t->right == nullptr) {
+            t.reset(t->left);
+        }
+        // Has only left child
+        else if (t->left == nullptr && t->right != nullptr) {
+            t.reset(t->right);
+        }
+        // Has both children
+        else {
+            // Find max element from left subtree
+            TreeNode<T>* np = t->left.get(); 
+            
+            // point np to the last node before max node
+            while (np->right->right != nullptr) {
+                np = np->right.get();
+            }
+
+            T max_val = np->right->element; // Max element found
+            np->right.reset(); // Delete node with maximum value
+
+            // Propagate max value up
+            t->element = max_val;
+        }
+
+        return true;
+    }
 }
