@@ -133,7 +133,6 @@ bool BST<T>::search(std::unique_ptr<TreeNode<T>>& t, const T& key) {
     if      (key < val) return search(t->left,  key);
     else if (key > val) return search(t->right, key);
     else                return true; // match found
-    }
 }
 
 template <typename T>
