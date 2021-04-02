@@ -161,12 +161,16 @@ bool BST<T>::remove(std::unique_ptr<TreeNode<T>>& t, const T& key) {
         // Has only left child
         else if (t->left != nullptr && t->right == nullptr) {
             TreeNode<T>* np = t.release();
-            t.reset(np->left);
+            t.reset(np->left.get());
+
+            delete np;
         }
         // Has only left child
         else if (t->left == nullptr && t->right != nullptr) {
             TreeNode<T>* np = t.release();
-            t.reset(np->right);
+            t.reset(np->right.get());
+
+            delete np;
         }
         // Has both children
         else {
