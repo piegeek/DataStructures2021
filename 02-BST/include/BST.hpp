@@ -65,6 +65,16 @@ bool BST<T>::insert(std::unique_ptr<TreeNode<T>>& t, const T& key) {
     // if insertion fails (i.e. if the key already exists in tree), return false
     // otherwise, return true
 
+    // If t is the root pointer <=> t == nullptr
+    if (t == nullptr) {
+        // Create root node
+        TreeNode<T>* new_node = new TreeNode<T>(key);
+        // Point to root node
+        t.reset(new_node);
+
+        return true;
+    }
+
     // Extract node value
     T val = t->element;
 
