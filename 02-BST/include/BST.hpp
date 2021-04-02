@@ -79,7 +79,7 @@ bool BST<T>::insert(std::unique_ptr<TreeNode<T>>& t, const T& key) {
     T val = t->element;
 
     // Go left and insert
-    if (key > val) {
+    if (key < val) {
         // Is leaf node? => Insert to the left
         if (t->left == nullptr) {
             // Create new node
@@ -95,7 +95,7 @@ bool BST<T>::insert(std::unique_ptr<TreeNode<T>>& t, const T& key) {
         }
     }
     // Go right and insert
-    else if (key < val) {
+    else if (key > val) {
         // Is leaf node? => Insert to the right
         if (t->right == nullptr) {
             // Create new node
