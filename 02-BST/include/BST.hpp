@@ -73,7 +73,7 @@ bool BST<T>::insert(std::unique_ptr<TreeNode<T>>& t, const T& key) {
         t.reset(new_node);
 
         return true;
-    }
+        }
 
     // Extract node value
     T val = t->element;
@@ -122,6 +122,18 @@ bool BST<T>::search(std::unique_ptr<TreeNode<T>>& t, const T& key) {
     // TODO
     // if key exists in tree, return true
     // otherwise, return false
+
+    // Empty tree 
+    if (t == nullptr) return false;
+
+    // Extract node value
+    T val = t->element;
+
+    // Traverse down and search
+    if      (key < val) return search(t->left,  key);
+    else if (key > val) return search(t->right, key);
+    else                return true; // match found
+    }
 }
 
 template <typename T>
