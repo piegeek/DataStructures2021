@@ -199,4 +199,6 @@ bool BST<T>::remove(std::unique_ptr<TreeNode<T>>& t, const T& key) {
 
         return true;
     }
+
+    return false;
 }
