@@ -64,6 +64,46 @@ bool BST<T>::insert(std::unique_ptr<TreeNode<T>>& t, const T& key) {
     // TODO
     // if insertion fails (i.e. if the key already exists in tree), return false
     // otherwise, return true
+
+    // Extract node value
+    T val = t->element;
+
+    // Go left and insert
+    if (key > val) {
+        // Is leaf node? => Insert to the left
+        if (t->left == nullptr) {
+            // Create new node
+            TreeNode<T>* new_node = new TreeNode<T>(key);
+            // Point to new node
+            t->left.reset(new_node);
+            
+            return true;
+        }
+        // Traverse down to the left and try insertion
+        else {
+            return insert(t->left, key);
+        }
+    }
+    // Go right and insert
+    else if (key < val) {
+        // Is leaf node? => Insert to the right
+        if (t->right == nullptr) {
+            // Create new node
+            TreeNode<T>* new_node = new TreeNode<T>(key);
+            // Point to new node
+            t->right.reset(new_node);
+            
+            return true;
+        }
+        // Traverse down to the right and try insertion
+        else {
+            return insert(t->right, key);
+        }
+    }
+    // Already exists
+    else {
+        return false;
+    }
 }
 
 template <typename T>
