@@ -160,17 +160,15 @@ bool BST<T>::remove(std::unique_ptr<TreeNode<T>>& t, const T& key) {
         }
         // Has only left child
         else if (t->left != nullptr && t->right == nullptr) {
-            TreeNode<T>* np = t.release();
-            t.reset(np->left.get());
-
-            // delete np;
+            // TreeNode<T>* np = t.release();
+            // t.reset(np->left.get());
+            t = std::move(t->left);
         }
         // Has only left child
         else if (t->left == nullptr && t->right != nullptr) {
-            TreeNode<T>* np = t.release();
-            t.reset(np->right.get());
-
-            // delete np;
+            // TreeNode<T>* np = t.release();
+            // t.reset(np->right.get());
+            t = std::move(t->right);
         }
         // Has both children
         else {
@@ -190,7 +188,7 @@ bool BST<T>::remove(std::unique_ptr<TreeNode<T>>& t, const T& key) {
                 }
 
                 max_val = np->right->element; // Max element found
-                np->right.reset(); // Delete node with maximum value
+                np->right.reset(nullptr); // Delete node with maximum value
             }
            
             // Propagate max value up
@@ -199,6 +197,4 @@ bool BST<T>::remove(std::unique_ptr<TreeNode<T>>& t, const T& key) {
 
         return true;
     }
-
-    return false;
 }
