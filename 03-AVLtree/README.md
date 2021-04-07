@@ -1,4 +1,4 @@
-# HW#2: AVL Tree
+# HW#3: AVL Tree
 
 * **Due date: 11:59pm, 4/21/2021**
 
