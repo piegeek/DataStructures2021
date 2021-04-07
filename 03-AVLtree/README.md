@@ -127,7 +127,7 @@ the function `insert(const T& key)` returns true, otherwise return false.
 
 ## Deletion
 
-The deletion strategy is same as BST (see XXX), 
+The deletion strategy is same as BST (see BST README.md), 
 but after deleting the node, 
 we have to balance the tree to maintain the property of AVL Tree.
 
