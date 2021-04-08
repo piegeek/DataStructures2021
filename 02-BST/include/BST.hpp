@@ -193,7 +193,7 @@ bool BST<T>::remove(std::unique_ptr<TreeNode<T>>& t, const T& key) {
                 }
 
                 max_val = np->right->element; // Max element found
-                np->right.reset(); // Delete node with maximum value
+                np->right.reset(nullptr); // Delete node with maximum value
             }
            
             // Propagate max value up
