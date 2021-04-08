@@ -160,7 +160,8 @@ bool BST<T>::remove(std::unique_ptr<TreeNode<T>>& t, const T& key) {
         }
         // Has only left child
         else if (t->left != nullptr && t->right == nullptr) {
-            t = std::move(t->left);
+            TreeNode<T>* tp = t.release();
+            t.reset(tp->left);
         }
         // Has only left child
         else if (t->left == nullptr && t->right != nullptr) {
@@ -172,29 +173,13 @@ bool BST<T>::remove(std::unique_ptr<TreeNode<T>>& t, const T& key) {
             T max_val;
             TreeNode<T>* np = t->left.get(); 
 
-            // // point np to the last node before max node
-            // while (np->right != nullptr) {
-            //     np = np->right.get();
-            // }
-
-            // max_val = np->element; // Max element found
-            // remove(max_val); // Delete node with maximum value
-
-            // np already points to the max node
-            if (np->right == nullptr) {
-                max_val = np->element;
-                t->left = std::move(np->left);
+            // point np to the last node before max node
+            while (np->right != nullptr) {
+                np = np->right.get();
             }
-            // Has to traverse down the tree to find maximum node
-            else {
-                // point np to the last node before max node
-                while (np->right->right != nullptr) {
-                    np = np->right.get();
-                }
 
-                max_val = np->right->element; // Max element found
-                np->right.reset(nullptr); // Delete node with maximum value
-            }
+            max_val = np->element; // Max element found
+            remove(max_val); // Delete node with maximum value
            
             // Propagate max value up
             t->element = max_val;
