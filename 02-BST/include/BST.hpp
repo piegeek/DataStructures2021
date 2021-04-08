@@ -183,6 +183,7 @@ bool BST<T>::remove(std::unique_ptr<TreeNode<T>>& t, const T& key) {
             // np already points to the max node
             if (np->right == nullptr) {
                 max_val = np->element;
+                t->left = std::move(np->left);
             }
             // Has to traverse down the tree to find maximum node
             else {
