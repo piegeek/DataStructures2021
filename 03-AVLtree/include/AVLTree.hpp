@@ -78,6 +78,10 @@ int AVLTree<T>::get_height(std::unique_ptr<TreeNode<T>>& n) const {
 template <typename T>
 int AVLTree<T>::get_balance_factor(std::unique_ptr<TreeNode<T>>& n) const {
     // TODO
+    int l_height = get_height(n->left);
+    int r_height = get_height(n->right);
+
+    return l_height - r_height;
 }
 
 
@@ -90,21 +94,65 @@ void AVLTree<T>::balance(std::unique_ptr<TreeNode<T>>& n) {
 template <typename T>
 void AVLTree<T>::left_rotate(std::unique_ptr<TreeNode<T>>& n) {
     // TODO
+    TreeNode<T>* right_node = n->right.get();
+
+    // 1. Move the middle subtree to the right subtree of the root
+    n->right = std::move(right_node->left);
+
+    // 2. Set the right node as root node
+    right_node->left = std::move(n);
+    std::unique_ptr<TreeNode<T>> new_root = std::make_unique<TreeNode<T>>(right_node);
+    n = std::move(new_root);
 }
 
 template <typename T>
 void AVLTree<T>::right_rotate(std::unique_ptr<TreeNode<T>>& n) {
     // TODO
+    TreeNode<T>* left_node = n->left.get();
+
+    // 1. Move the middle subtree to the left subtree of the root
+    n->left = std::move(left_node->right);
+
+    // 2. Set the left node as root node
+    left_node->right = std::move(n);
+    std::unique_ptr<TreeNode<T>> new_root = std::make_unique<TreeNode<T>>(left_node);
+    n = std::move(new_root);
 }
 
 template <typename T>
 void AVLTree<T>::left_right_rotate(std::unique_ptr<TreeNode<T>>& n) {
     // TODO
+    TreeNode<T>* left_right_node = n->left->right.get();
+    TreeNode<T>* left_node       = n->left.get();
+    TreeNode<T>* right_node      = n.get();
+
+    // 1. Move the middle subtrees to the left and right node respectively.
+    left_node->right = std::move(left_right_node->left);
+    right_node->left = std::move(left_right_node->right);
+
+    // 2. Set the left-right node as the new root node
+    left_right_node->left  = std::move(n->left);
+    left_right_node->right = std::move(n);
+    std::unique_ptr<TreeNode<T>> new_root = std::make_unique<TreeNode<T>>(left_right_node);
+    n = std::move(new_root);
 }
 
 template <typename T>
 void AVLTree<T>::right_left_rotate(std::unique_ptr<TreeNode<T>>& n) {
     // TODO
+    TreeNode<T>* right_left_node = n->right->left.get();
+    TreeNode<T>* right_node      = n->right.get();
+    TreeNode<T>* left_node       = n.get();
+
+    // 1. Move the middle subtrees to the left and right node respectively.
+    left_node->right = std::move(right_left_node->left);
+    right_node->left = std::move(right_left_node->right);
+
+    // 2. Set the left-right node as the new root node
+    right_left_node->left  = std::move(n);
+    right_left_node->right = std::move(n->right);
+    std::unique_ptr<TreeNode<T>> new_root = std::make_unique<TreeNode<T>>(right_left_node);
+    n = std::move(new_root);
 }
 
 template <typename T>
