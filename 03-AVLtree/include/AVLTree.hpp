@@ -88,6 +88,7 @@ bool AVLTree<T>::insert(std::unique_ptr<TreeNode<T>>& n, const T& key) {
             balance(n);
         }
 
+        n->height = std::max(get_height(n->left), get_height(n->right)) + 1;
         return true;
     }
     if (key > val) {
@@ -103,6 +104,7 @@ bool AVLTree<T>::insert(std::unique_ptr<TreeNode<T>>& n, const T& key) {
             balance(n);
         }
 
+        n->height = std::max(get_height(n->left), get_height(n->right)) + 1;
         return true;
     }
 }
@@ -148,7 +150,6 @@ void AVLTree<T>::balance(std::unique_ptr<TreeNode<T>>& n) {
         if (right_right_h < right_left_h) left_rotate(n);
     }
 
-    n->height = std::max(get_height(n->left), get_height(n->right)) + 1;
 }
 
 
