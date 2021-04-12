@@ -86,6 +86,7 @@ bool AVLTree<T>::insert(std::unique_ptr<TreeNode<T>>& n, const T& key) {
             insert(n->left, key);
             // Balance
             balance(n);
+            height++;
         }
 
         return true;
@@ -103,6 +104,7 @@ bool AVLTree<T>::insert(std::unique_ptr<TreeNode<T>>& n, const T& key) {
             return insert(n->right, key);
             // Balance
             balance(n);
+            height++;
         }
     }
 }
