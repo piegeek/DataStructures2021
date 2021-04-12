@@ -62,6 +62,49 @@ bool AVLTree<T>::remove(const T& key) {
 template <typename T>
 bool AVLTree<T>::insert(std::unique_ptr<TreeNode<T>>& n, const T& key) {
     // TODO
+    // Is empty tree
+    if (n == nullptr) {
+        std::unique_ptr<TreeNode<T>> new_node = std::make_unique<TreeNode<T>>(key);
+        n = std::move(new_node);
+
+        return true;
+    }
+
+    // Extract val
+    T val = n->element;
+
+    if (key == val) return false; // Already exists
+    
+    if (key < val) {
+        // No left child : Insert directly to the left
+        if (n->left == nullptr) {
+            std::unique_ptr<TreeNode<T>> new_node = std::make_unique<TreeNode<T>>(key);
+            n->left = std::move(new_node);
+        }
+        else {
+            // Traverse down and insert
+            insert(n->left, key);
+            // Balance
+            balance(n);
+        }
+
+        return true;
+    }
+    if (key > val) {
+        // No right child : Insert directly to the right 
+        if (n->right == nullptr) {
+            std::unique_ptr<TreeNode<T>> new_node = std::make_unique<TreeNode<T>>(key);
+            n->right = std::move(new_node);
+
+            return true;
+        }
+        else {
+            // Traverse down and insert
+            return insert(n->right, key);
+            // Balance
+            balance(n);
+        }
+    }
 }
 
 template <typename T>
@@ -88,6 +131,22 @@ int AVLTree<T>::get_balance_factor(std::unique_ptr<TreeNode<T>>& n) const {
 template <typename T>
 void AVLTree<T>::balance(std::unique_ptr<TreeNode<T>>& n) {
     // You do not have to use/write balance function if you think it is unnecessary.
+    int balance_factor = get_balance_factor(n);
+
+    if (balance_factor > 1) { // Left is deeper than right by a factor of 2; happens when inserting on the left
+        int left_left_h  = get_height(n->left->left);
+        int left_right_h = get_height(n->left->right);
+
+        if (left_left_h > left_right_h) left_right_rotate(n);
+        if (left_left_h < left_right_h) right_rotate(n);
+    }
+    if (balance_factor < -1) { // Left is deeper than right by a factor of 2; happens when inserting on the left
+        int right_right_h = get_height(n->right->right);
+        int right_left_h  = get_height(n->right->left);
+
+        if (right_right_h > right_left_h) right_left_rotate(n);
+        if (right_right_h < right_left_h) left_rotate(n);
+    }
 }
 
 
