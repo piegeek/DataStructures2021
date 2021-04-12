@@ -124,7 +124,7 @@ int AVLTree<T>::get_balance_factor(std::unique_ptr<TreeNode<T>>& n) const {
     int l_height = get_height(n->left);
     int r_height = get_height(n->right);
 
-    return l_height - r_height;
+    return n == nullptr ? 0 : l_height - r_height;
 }
 
 
