@@ -160,7 +160,7 @@ void AVLTree<T>::left_rotate(std::unique_ptr<TreeNode<T>>& n) {
 
     // 2. Set the right node as root node
     right_node->left = std::move(n);
-    std::unique_ptr<TreeNode<T>> new_root = std::make_unique<TreeNode<T>>(right_node);
+    std::unique_ptr<TreeNode<T>> new_root(right_node);
     n = std::move(new_root);
 }
 
@@ -174,7 +174,7 @@ void AVLTree<T>::right_rotate(std::unique_ptr<TreeNode<T>>& n) {
 
     // 2. Set the left node as root node
     left_node->right = std::move(n);
-    std::unique_ptr<TreeNode<T>> new_root = std::make_unique<TreeNode<T>>(left_node);
+    std::unique_ptr<TreeNode<T>> new_root(left_node);
     n = std::move(new_root);
 }
 
@@ -192,7 +192,7 @@ void AVLTree<T>::left_right_rotate(std::unique_ptr<TreeNode<T>>& n) {
     // 2. Set the left-right node as the new root node
     left_right_node->left  = std::move(n->left);
     left_right_node->right = std::move(n);
-    std::unique_ptr<TreeNode<T>> new_root = std::make_unique<TreeNode<T>>(left_right_node);
+    std::unique_ptr<TreeNode<T>> new_root(left_right_node);
     n = std::move(new_root);
 }
 
@@ -210,7 +210,7 @@ void AVLTree<T>::right_left_rotate(std::unique_ptr<TreeNode<T>>& n) {
     // 2. Set the left-right node as the new root node
     right_left_node->left  = std::move(n);
     right_left_node->right = std::move(n->right);
-    std::unique_ptr<TreeNode<T>> new_root = std::make_unique<TreeNode<T>>(right_left_node);
+    std::unique_ptr<TreeNode<T>> new_root(right_left_node);
     n = std::move(new_root);
 }
 
