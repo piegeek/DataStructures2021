@@ -95,8 +95,6 @@ bool AVLTree<T>::insert(std::unique_ptr<TreeNode<T>>& n, const T& key) {
         if (n->right == nullptr) {
             std::unique_ptr<TreeNode<T>> new_node = std::make_unique<TreeNode<T>>(key);
             n->right = std::move(new_node);
-
-            return true;
         }
         else {
             // Traverse down and insert
@@ -104,6 +102,8 @@ bool AVLTree<T>::insert(std::unique_ptr<TreeNode<T>>& n, const T& key) {
             // Balance
             balance(n);
         }
+
+        return true;
     }
 }
 
