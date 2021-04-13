@@ -163,7 +163,7 @@ void AVLTree<T>::left_rotate(std::unique_ptr<TreeNode<T>>& n) {
     k1->left.reset(k2);
 
     k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
-    k1->height = std::max(get_height(k1->right), get_height(k2)) + 1;
+    k1->height = std::max(get_height(k1->right), k2->height) + 1;
 
     n.reset(k1);
 }
@@ -190,7 +190,7 @@ void AVLTree<T>::right_rotate(std::unique_ptr<TreeNode<T>>& n) {
     k1->right.reset(k2); 
 
     k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
-    k1->height = std::max(get_height(k1->left), get_height(k2)) + 1;
+    k1->height = std::max(get_height(k1->left), k2->height) + 1;
 
     n.reset(k1);
 }
