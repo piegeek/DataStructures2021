@@ -144,31 +144,55 @@ void AVLTree<T>::balance(std::unique_ptr<TreeNode<T>>& n) {
 template <typename T>
 void AVLTree<T>::left_rotate(std::unique_ptr<TreeNode<T>>& n) {
     // TODO
-    std::unique_ptr<TreeNode<T>>& k2 = n;
-    std::unique_ptr<TreeNode<T>>& k1 = n->right;
+    // std::unique_ptr<TreeNode<T>>& k2 = n;
+    // std::unique_ptr<TreeNode<T>>& k1 = n->right;
+
+    // k2->right  = std::move(k1->left);
+    // k1->left   = std::move(k2);
+
+    // k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
+    // k1->height = std::max(get_height(k1->right), get_height(k2)) + 1;
+
+    // k2 = std::move(k1);
+
+    // 
+    TreeNode<T>* k2 = n.get();
+    TreeNode<T>* k1 = n->right.get();
 
     k2->right  = std::move(k1->left);
-    k1->left   = std::move(k2);
+    k1->left.reset(k2);
 
     k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
     k1->height = std::max(get_height(k1->right), get_height(k2)) + 1;
 
-    k2 = std::move(k1);
+    n.reset(k1);
 }
 
 template <typename T>
 void AVLTree<T>::right_rotate(std::unique_ptr<TreeNode<T>>& n) {
     // TODO
-    std::unique_ptr<TreeNode<T>>& k2 = n;
-    std::unique_ptr<TreeNode<T>>& k1 = n->left;
+    // std::unique_ptr<TreeNode<T>>& k2 = n;
+    // std::unique_ptr<TreeNode<T>>& k1 = n->left;
+
+    // k2->left   = std::move(k1->right);
+    // k1->right  = std::move(k2); // k2 gets nullified here
+
+    // k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
+    // k1->height = std::max(get_height(k1->left), get_height(k2)) + 1;
+
+    // k2 = std::move(k1);
+
+    // 
+    TreeNode<T>* k2 = n.get();
+    TreeNode<T>* k1 = k2->left.get();
 
     k2->left   = std::move(k1->right);
-    k1->right  = std::move(k2);
+    k1->right.reset(k2); 
 
     k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
     k1->height = std::max(get_height(k1->left), get_height(k2)) + 1;
 
-    k2 = std::move(k1);
+    n.reset(k1);
 }
 
 template <typename T>
