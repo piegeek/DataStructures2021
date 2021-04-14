@@ -102,7 +102,8 @@ bool AVLTree<T>::remove(std::unique_ptr<TreeNode<T>>& n, const T& key) {
 
 template <typename T>
 int AVLTree<T>::get_height(std::unique_ptr<TreeNode<T>>& n) const {
-    return n == nullptr ? -1 : n->height;
+    if (n == nullptr) return -1;
+    return n->height;
 }
 
 template <typename T>
@@ -124,15 +125,15 @@ void AVLTree<T>::balance(std::unique_ptr<TreeNode<T>>& n) {
         int left_left_h  = get_height(n->left->left);
         int left_right_h = get_height(n->left->right);
 
-        if (left_left_h > left_right_h) right_left_rotate(n);
-        if (left_left_h < left_right_h) right_rotate(n);
+        if (left_left_h > left_right_h) right_rotate(n);
+        if (left_left_h < left_right_h) right_left_rotate(n);
     }
     if (balance_factor < -1) { // Left is deeper than right by a factor of 2; happens when inserting on the left
         int right_right_h = get_height(n->right->right);
         int right_left_h  = get_height(n->right->left);
 
-        if (right_right_h > right_left_h) left_right_rotate(n);
-        if (right_right_h < right_left_h) left_rotate(n);
+        if (right_right_h > right_left_h) left_rotate(n);
+        if (right_right_h < right_left_h) left_right_rotate(n);
     }
 
     // Set new height
@@ -202,7 +203,7 @@ void AVLTree<T>::right_rotate(std::unique_ptr<TreeNode<T>>& n) {
     // n.reset(k1);
 
     std::unique_ptr<TreeNode<T>> m = std::move(n->left);
-    n->left = std::move(m->right);
+    n->left = std::move(m->right); // OK
     m->right = std::move(n);
 
     n->height = std::max(get_height(n->left), get_height(n->right)) + 1;
