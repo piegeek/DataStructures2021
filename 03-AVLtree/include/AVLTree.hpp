@@ -124,7 +124,7 @@ bool AVLTree<T>::remove(std::unique_ptr<TreeNode<T>>& n, const T& key) {
         if (n->left == nullptr && n->right == nullptr) {
             n.reset(nullptr);
 
-            // return true;
+            return true;
         }
         // Has only left child
         else if (n->left != nullptr && n->right == nullptr) {
