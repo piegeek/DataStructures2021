@@ -124,19 +124,19 @@ bool AVLTree<T>::remove(std::unique_ptr<TreeNode<T>>& n, const T& key) {
         if (n->left == nullptr && n->right == nullptr) {
             n.reset(nullptr);
 
-            return true;
+            // return true;
         }
         // Has only left child
         else if (n->left != nullptr && n->right == nullptr) {
             n = std::move(n->left);
 
-            return true;
+            // return true;
         }
         // Has only left child
         else if (n->left == nullptr && n->right != nullptr) {
             n = std::move(n->right);
 
-            return true;
+            // return true;
         }
         // Has both children
         else {
@@ -155,10 +155,13 @@ bool AVLTree<T>::remove(std::unique_ptr<TreeNode<T>>& n, const T& key) {
             // Propagate max value up
             n->element = max_val;
 
-            balance(n);
+            // balance(n);
 
-            return true;
+            // return true;
         }
+
+        balance(n);
+        return true;
     }
 }
 
