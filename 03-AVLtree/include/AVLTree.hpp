@@ -109,10 +109,12 @@ int AVLTree<T>::get_height(std::unique_ptr<TreeNode<T>>& n) const {
 template <typename T>
 int AVLTree<T>::get_balance_factor(std::unique_ptr<TreeNode<T>>& n) const {
     // TODO
+    if (n == nullptr) return 0;
+
     int l_height = get_height(n->left);
     int r_height = get_height(n->right);
 
-    return n == nullptr ? 0 : l_height - r_height;
+    return l_height - r_height;
 }
 
 
@@ -145,29 +147,6 @@ void AVLTree<T>::balance(std::unique_ptr<TreeNode<T>>& n) {
 template <typename T>
 void AVLTree<T>::left_rotate(std::unique_ptr<TreeNode<T>>& n) {
     // TODO
-    // std::unique_ptr<TreeNode<T>>& k2 = n;
-    // std::unique_ptr<TreeNode<T>>& k1 = n->right;
-
-    // k2->right  = std::move(k1->left);
-    // k1->left   = std::move(k2);
-
-    // k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
-    // k1->height = std::max(get_height(k1->right), get_height(k2)) + 1;
-
-    // k2 = std::move(k1);
-
-    // 
-    // TreeNode<T>* k2 = n.get();
-    // TreeNode<T>* k1 = n->right.get();
-
-    // k2->right  = std::move(k1->left);
-    // k1->left.reset(k2);
-
-    // k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
-    // k1->height = std::max(get_height(k1->right), k2->height) + 1;
-
-    // n.reset(k1);
-
     std::unique_ptr<TreeNode<T>> m = std::move(n->right);
     n->right= std::move(m->left);
     m->left= std::move(n); // n turns into nullptr here
@@ -183,29 +162,6 @@ void AVLTree<T>::left_rotate(std::unique_ptr<TreeNode<T>>& n) {
 template <typename T>
 void AVLTree<T>::right_rotate(std::unique_ptr<TreeNode<T>>& n) {
     // TODO
-    // std::unique_ptr<TreeNode<T>>& k2 = n;
-    // std::unique_ptr<TreeNode<T>>& k1 = n->left;
-
-    // k2->left   = std::move(k1->right);
-    // k1->right  = std::move(k2); // k2 gets nullified here
-
-    // k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
-    // k1->height = std::max(get_height(k1->left), get_height(k2)) + 1;
-
-    // k2 = std::move(k1);
-
-    // 
-    // TreeNode<T>* k2 = n.get();
-    // TreeNode<T>* k1 = k2->left.get();
-
-    // k2->left   = std::move(k1->right); // k1 gets deleted here?
-    // k1->right.reset(k2); 
-
-    // k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
-    // k1->height = std::max(get_height(k1->left), k2->height) + 1;
-
-    // n.reset(k1);
-
     std::unique_ptr<TreeNode<T>> m = std::move(n->left);
     n->left = std::move(m->right); // OK
     m->right = std::move(n); // n is nullptr here

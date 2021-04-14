@@ -7,24 +7,22 @@
 
 template <typename T>
 void print_avl_tree(TreeNode<T>* t, int depth = 0) {
-    int to_print = t == nullptr ? 0 : t->element;
+    if (t == nullptr) return;
 
+    int to_print = t->element;
     std::cout << std::string(4 * depth, ' ') << to_print << std::endl;
+
     print_avl_tree(t->left.get(), depth+1);
-    print_avl_tree(t->left.get(), depth+1);
+    print_avl_tree(t->right.get(), depth+1);
 }
 
 int main() {
 
     auto bt = AVLTree<int>();
 
-    bt.insert(3);
-    bt.insert(1);
-    bt.insert(2);
-    bt.insert(4);
-    bt.insert(5);
-    bt.insert(7);
-    bt.insert(19);
+    for (auto i = 1; i <= 1000; i++) {
+        bt.insert(i);
+    }
 
     TreeNode<int>* root_ptr = bt.root.get(); 
 
