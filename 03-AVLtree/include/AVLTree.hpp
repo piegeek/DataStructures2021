@@ -102,8 +102,7 @@ bool AVLTree<T>::remove(std::unique_ptr<TreeNode<T>>& n, const T& key) {
 
 template <typename T>
 int AVLTree<T>::get_height(std::unique_ptr<TreeNode<T>>& n) const {
-    if (n == nullptr) return -1;
-    return n->height;
+    return n == nullptr ? -1 : n->height;
 }
 
 template <typename T>
