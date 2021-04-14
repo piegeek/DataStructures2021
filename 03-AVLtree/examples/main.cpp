@@ -20,13 +20,17 @@ int main() {
 
     auto bt = AVLTree<int>();
 
-    for (auto i = 1; i <= 1000; i++) {
+    for (auto i = 1; i <= 10; i++) {
         bt.insert(i);
     }
 
-    TreeNode<int>* root_ptr = bt.root.get(); 
+    for (auto i = 1; i <= 10; i++) {
+        bt.remove(i);
+    }
 
-    print_avl_tree(root_ptr);
+    // TreeNode<int>* root_ptr = bt.root.get(); 
+
+    // print_avl_tree(root_ptr);
     
     // std::cout <<"height should be 1" << std::endl;
     // std::cout <<"height is " << bt.get_height(bt.root) << std::endl;
