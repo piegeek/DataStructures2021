@@ -97,6 +97,63 @@ bool AVLTree<T>::insert(std::unique_ptr<TreeNode<T>>& n, const T& key) {
 template <typename T>
 bool AVLTree<T>::remove(std::unique_ptr<TreeNode<T>>& n, const T& key) {
     // TODO
+    // Is empty tree
+    if (n == nullptr) return false;
+
+    // Extract val
+    T val = n->element;
+
+    if (key < val) {
+        bool remove_success = remove(n->left, key);
+
+        // Balance
+        balance(n);
+
+        return remove_success
+    }
+    else if (key > val) {
+        bool remove_success = remove(n->right, key);
+
+        // Balance
+        balance(n);
+
+        return remove_success
+    }
+    else {
+        // Is leaf node
+        if (n->left == nullptr && n->right == nullptr) {
+            n.reset(nullptr);
+        }
+        // Has only left child
+        else if (n->left != nullptr && n->right == nullptr) {
+            n = std::move(n->left);
+        }
+        // Has only left child
+        else if (n->left == nullptr && n->right != nullptr) {
+            n = std::move(n->right);
+        }
+        // Has both children
+        else {
+            // Find max element from left subtree
+            T max_val;
+            TreeNode<T>* np = n->left.get(); 
+
+            // point np to the last node before max node
+            while (np->right != nullptr) {
+                np = np->right.get();
+            }
+
+            max_val = np->element; // Max element found
+            remove(max_val); // Delete node with maximum value
+           
+            // Propagate max value up
+            n->element = max_val;
+        }
+
+        balance(n);
+
+        return true;
+    }
 }
 
 
