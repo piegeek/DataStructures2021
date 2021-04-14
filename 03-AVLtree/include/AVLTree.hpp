@@ -156,16 +156,23 @@ void AVLTree<T>::left_rotate(std::unique_ptr<TreeNode<T>>& n) {
     // k2 = std::move(k1);
 
     // 
-    TreeNode<T>* k2 = n.get();
-    TreeNode<T>* k1 = n->right.get();
+    // TreeNode<T>* k2 = n.get();
+    // TreeNode<T>* k1 = n->right.get();
 
-    k2->right  = std::move(k1->left);
-    k1->left.reset(k2);
+    // k2->right  = std::move(k1->left);
+    // k1->left.reset(k2);
 
-    k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
-    k1->height = std::max(get_height(k1->right), k2->height) + 1;
+    // k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
+    // k1->height = std::max(get_height(k1->right), k2->height) + 1;
 
-    n.reset(k1);
+    // n.reset(k1);
+
+    std::unique_ptr<TreeNode<T>> m = std::move(n->right);
+    n->right= std::move(m->left);
+    m->left= std::move(n);
+
+    n->height = std::max(get_height(n->left), get_height(n->right)) + 1;
+    m->height = std::max(get_height(m->left), get_height(m->right)) + 1;
 }
 
 template <typename T>
@@ -183,16 +190,23 @@ void AVLTree<T>::right_rotate(std::unique_ptr<TreeNode<T>>& n) {
     // k2 = std::move(k1);
 
     // 
-    TreeNode<T>* k2 = n.get();
-    TreeNode<T>* k1 = k2->left.get();
+    // TreeNode<T>* k2 = n.get();
+    // TreeNode<T>* k1 = k2->left.get();
 
-    k2->left   = std::move(k1->right);
-    k1->right.reset(k2); 
+    // k2->left   = std::move(k1->right); // k1 gets deleted here?
+    // k1->right.reset(k2); 
 
-    k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
-    k1->height = std::max(get_height(k1->left), k2->height) + 1;
+    // k2->height = std::max(get_height(k2->left), get_height(k2->right)) + 1;
+    // k1->height = std::max(get_height(k1->left), k2->height) + 1;
 
-    n.reset(k1);
+    // n.reset(k1);
+
+    std::unique_ptr<TreeNode<T>> m = std::move(n->left);
+    n->left = std::move(m->right);
+    m->right = std::move(n);
+
+    n->height = std::max(get_height(n->left), get_height(n->right)) + 1;
+    m->height = std::max(get_height(m->left), get_height(m->right)) + 1;
 }
 
 template <typename T>
