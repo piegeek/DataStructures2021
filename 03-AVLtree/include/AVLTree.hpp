@@ -170,10 +170,14 @@ void AVLTree<T>::left_rotate(std::unique_ptr<TreeNode<T>>& n) {
 
     std::unique_ptr<TreeNode<T>> m = std::move(n->right);
     n->right= std::move(m->left);
-    m->left= std::move(n);
+    m->left= std::move(n); // n turns into nullptr here
 
-    n->height = std::max(get_height(n->left), get_height(n->right)) + 1;
+    TreeNode<T>* new_left = m->left.get();
+
+    new_left->height = std::max(get_height(new_left->left), get_height(new_left->right)) + 1;
     m->height = std::max(get_height(m->left), get_height(m->right)) + 1;
+
+    n = std::move(m);
 }
 
 template <typename T>
@@ -204,10 +208,14 @@ void AVLTree<T>::right_rotate(std::unique_ptr<TreeNode<T>>& n) {
 
     std::unique_ptr<TreeNode<T>> m = std::move(n->left);
     n->left = std::move(m->right); // OK
-    m->right = std::move(n);
+    m->right = std::move(n); // n is nullptr here
 
-    n->height = std::max(get_height(n->left), get_height(n->right)) + 1;
+    TreeNode<T>* new_right = m->right.get();
+
+    new_right->height = std::max(get_height(new_right->left), get_height(new_right->right)) + 1;
     m->height = std::max(get_height(m->left), get_height(m->right)) + 1;
+
+    n = std::move(m);
 }
 
 template <typename T>
