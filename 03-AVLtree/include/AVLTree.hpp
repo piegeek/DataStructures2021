@@ -109,7 +109,7 @@ bool AVLTree<T>::remove(std::unique_ptr<TreeNode<T>>& n, const T& key) {
         // Balance
         balance(n);
 
-        return remove_success
+        return remove_success;
     }
     else if (key > val) {
         bool remove_success = remove(n->right, key);
@@ -117,7 +117,7 @@ bool AVLTree<T>::remove(std::unique_ptr<TreeNode<T>>& n, const T& key) {
         // Balance
         balance(n);
 
-        return remove_success
+        return remove_success;
     }
     else {
         // Is leaf node
