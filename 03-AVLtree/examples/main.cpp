@@ -24,8 +24,12 @@ int main() {
         bt.insert(i);
     }
 
+    TreeNode<int>* root_ptr = bt.root.get(); 
+
     for (auto i = 1; i <= 10; i++) {
         bt.remove(i);
+
+        print_avl_tree(root_ptr);
     }
 
     // TreeNode<int>* root_ptr = bt.root.get(); 
