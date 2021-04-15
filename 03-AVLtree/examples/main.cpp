@@ -65,7 +65,7 @@ int main() {
     std::random_device rd;
     std::mt19937 g(rd());
 
-    int tree_size = 1 << 10;
+    int tree_size = 10;
     std::vector<int> v;
     v.resize(tree_size);
     std::generate(v.begin(), v.end(), std::rand);
@@ -84,7 +84,10 @@ int main() {
 
     for (auto ele: x) {
         tree->remove(ele);
-        if (is_AVL(tree) == false) print_avl_tree(tree->root.get());
+        if (is_AVL(tree) == false) {
+            is_AVL(tree);
+            print_avl_tree(tree->root.get());
+        } 
     }
 
 
