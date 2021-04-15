@@ -7,12 +7,13 @@
 #include "AVLTree.hpp"
 
 template <typename T>
-bool is_AVL(AVLTree<T> &bt) {
-    if (bt.root == nullptr) return false;
+bool is_AVL(std::unique_ptr<AVLTree<T>> &t) {
+
+    if (t->root == nullptr) return false;
 
     std::stack<TreeNode<T>*> s1;
 
-    s1.push(bt.root.get());
+    s1.push(t->root.get());
 
     while (!s1.empty()) {
 
@@ -60,39 +61,68 @@ void print_avl_tree(TreeNode<T>* t, int depth = 0) {
 
 int main() {
 
-    auto bt = AVLTree<int>();
+    auto tree = std::make_unique<AVLTree<int>>();
+    std::random_device rd;
+    std::mt19937 g(rd());
 
-    for (auto i = 1; i <= 10; i++) {
-        bt.insert(i);
+    int tree_size = 1 << 10;
+    std::vector<int> v;
+    v.resize(tree_size);
+    std::generate(v.begin(), v.end(), std::rand);
+    std::sort(v.begin(), v.end());
+    v.erase(std::unique(v.begin(), v.end()), v.end());
+    std::shuffle(v.begin(), v.end(), g);
+
+    tree_size = v.size();
+
+    for (auto ele: v) {
+        tree->insert(ele);
     }
 
-    TreeNode<int>* root_ptr = bt.root.get(); 
+    std::shuffle(v.begin(), v.end(), g);   
+    auto x = std::vector<int>(v.begin(), v.begin() + std::distance(v.begin(), v.end()) / 2);
 
-    for (auto i = 1; i <= 10; i++) {
-        // std::cout << is_AVL(bt) << std::endl;
-        std::cout << "BEFORE DELETE: " << i << std::endl;
-        root_ptr = bt.root.get(); 
-        print_avl_tree(root_ptr);
-
-        bt.remove(i);
-
-        std::cout << "AFTER DELETE: " << i << std::endl;
-        root_ptr = bt.root.get(); 
-        print_avl_tree(root_ptr);
+    for (auto ele: x) {
+        tree->remove(ele);
+        if (is_AVL(tree) == false) print_avl_tree(tree->root.get());
     }
+
+
+    // auto bt = AVLTree<int>();
+
+    // for (auto i = 1; i <= 100; i++) {
+    //     bt.insert(i);
+    // }
 
     // TreeNode<int>* root_ptr = bt.root.get(); 
 
-    // print_avl_tree(root_ptr);
+    // for (auto i = 1; i <= 100; i++) {
+    //     if (is_AVL(bt) == false) {
+    //     std::cout << i << std::endl;
+    //     }
+    //     // std::cout << "BEFORE DELETE: " << i << std::endl;
+    //     // root_ptr = bt.root.get(); 
+    //     // print_avl_tree(root_ptr);
+
+    //     bt.remove(i);
+
+    //     // std::cout << "AFTER DELETE: " << i << std::endl;
+    //     // root_ptr = bt.root.get(); 
+    //     // print_avl_tree(root_ptr);
+    // }
+
+    // // TreeNode<int>* root_ptr = bt.root.get(); 
+
+    // // print_avl_tree(root_ptr);
     
-    // std::cout <<"height should be 1" << std::endl;
-    // std::cout <<"height is " << bt.get_height(bt.root) << std::endl;
+    // // std::cout <<"height should be 1" << std::endl;
+    // // std::cout <<"height is " << bt.get_height(bt.root) << std::endl;
 
-    // bt.remove(4);
-    // bt.remove(2);
+    // // bt.remove(4);
+    // // bt.remove(2);
 
-    // std::cout <<"height should be 1" << std::endl;
-    // std::cout <<"height is " << bt.get_height(bt.root) << std::endl;
+    // // std::cout <<"height should be 1" << std::endl;
+    // // std::cout <<"height is " << bt.get_height(bt.root) << std::endl;
 
 
     return 0;
