@@ -24,9 +24,17 @@ bool is_AVL(std::unique_ptr<AVLTree<T>> &t) {
         int r_h = (node->right == nullptr) ? -1 : node->right->height;
         int bf = l_h - r_h;
         
-        if (std::abs(bf) >= 2) return false;
+        if (std::abs(bf) >= 2){
+            std::cout << "balance factor err" << std::endl;
+            print_avl_tree(node);
+            return false;
+        }
 
-        if (n_h != std::max(l_h, r_h) + 1) return false;
+        if (n_h != std::max(l_h, r_h) + 1) {
+            std::cout << "node height err" << std::endl;
+            print_avl_tree(node);
+            return false;
+        }
 
         s1.pop();
 
@@ -34,12 +42,20 @@ bool is_AVL(std::unique_ptr<AVLTree<T>> &t) {
 
         if (node->left != nullptr) {
 //            REQUIRE(ele > node->left->element);
-            if (!(ele > node->left->element))  return false;
+            if (!(ele > node->left->element))  {
+                std::cout << "parent smaller than left err" << std::endl;
+                print_avl_tree(node);
+                return false;
+            }
             s1.push(node->left.get());
         }
         if (node->right != nullptr) {
 //            REQUIRE(ele < node->right->element);
-            if (!(ele < node->right->element)) return false;
+            if (!(ele < node->right->element)) {
+                std::cout << "parent larger than right err" << std::endl;
+                print_avl_tree(node);
+                return false;
+            }
             
             s1.push(node->right.get());
         }
@@ -65,7 +81,7 @@ int main() {
     std::random_device rd;
     std::mt19937 g(rd());
 
-    int tree_size = 10;
+    int tree_size = 50;
     std::vector<int> v;
     v.resize(tree_size);
     std::generate(v.begin(), v.end(), std::rand);
