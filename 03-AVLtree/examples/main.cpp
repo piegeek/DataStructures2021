@@ -52,7 +52,7 @@ void print_avl_tree(TreeNode<T>* t, int depth = 0) {
     if (t == nullptr) return;
 
     int to_print = t->element;
-    std::cout << std::string(4 * depth, ' ') << to_print << std::endl;
+    std::cout << std::string(4 * depth, ' ') << t->element << "(" << t->height << ")" << std::endl;
 
     print_avl_tree(t->left.get(), depth+1);
     print_avl_tree(t->right.get(), depth+1);
@@ -69,8 +69,16 @@ int main() {
     TreeNode<int>* root_ptr = bt.root.get(); 
 
     for (auto i = 1; i <= 10; i++) {
-        std::cout << is_AVL(bt) << std::endl;
+        // std::cout << is_AVL(bt) << std::endl;
+        std::cout << "BEFORE DELETE: " << i << std::endl;
+        root_ptr = bt.root.get(); 
+        print_avl_tree(root_ptr);
+
         bt.remove(i);
+
+        std::cout << "AFTER DELETE: " << i << std::endl;
+        root_ptr = bt.root.get(); 
+        print_avl_tree(root_ptr);
     }
 
     // TreeNode<int>* root_ptr = bt.root.get(); 

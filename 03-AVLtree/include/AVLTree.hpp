@@ -113,7 +113,7 @@ bool AVLTree<T>::remove(std::unique_ptr<TreeNode<T>>& n, const T& key) {
         if      (n->left == nullptr && n->right == nullptr) n.reset(nullptr);
         // Has only left child
         else if (n->left != nullptr && n->right == nullptr) n = std::move(n->left);
-        // Has only left child
+        // Has only right child
         else if (n->left == nullptr && n->right != nullptr) n = std::move(n->right);
         // Has both children
         else {
@@ -171,14 +171,14 @@ void AVLTree<T>::balance(std::unique_ptr<TreeNode<T>>& n) {
         int left_right_h = get_height(n->left->right);
 
         if (left_left_h > left_right_h) right_rotate(n);
-        if (left_left_h < left_right_h) right_left_rotate(n);
+        if (left_left_h <= left_right_h) right_left_rotate(n);
     }
-    if (balance_factor < -1) { // Left is deeper than right by a factor of 2; happens when inserting on the left
+    if (balance_factor < -1) { // Right is deeper than right by a factor of 2; happens when inserting on the right 
         int right_right_h = get_height(n->right->right);
         int right_left_h  = get_height(n->right->left);
 
         if (right_right_h > right_left_h) left_rotate(n);
-        if (right_right_h < right_left_h) left_right_rotate(n);
+        if (right_right_h <= right_left_h) left_right_rotate(n);
     }
 
     // Set new height
