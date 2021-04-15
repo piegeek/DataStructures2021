@@ -103,41 +103,18 @@ bool AVLTree<T>::remove(std::unique_ptr<TreeNode<T>>& n, const T& key) {
     // Extract val
     T val = n->element;
 
-    if (key < val) {
-        bool remove_success = remove(n->left, key);
+    // Return value
+    bool remove_success;
 
-        // Balance
-        balance(n);
-
-        return remove_success;
-    }
-    else if (key > val) {
-        bool remove_success = remove(n->right, key);
-
-        // Balance
-        balance(n);
-
-        return remove_success;
-    }
+    if      (key < val) remove_success = remove(n->left, key);
+    else if (key > val) remove_success = remove(n->right, key);
     else {
         // Is leaf node
-        if (n->left == nullptr && n->right == nullptr) {
-            n.reset(nullptr);
-
-            return true;
-        }
+        if      (n->left == nullptr && n->right == nullptr) n.reset(nullptr);
         // Has only left child
-        else if (n->left != nullptr && n->right == nullptr) {
-            n = std::move(n->left);
-
-            // return true;
-        }
+        else if (n->left != nullptr && n->right == nullptr) n = std::move(n->left);
         // Has only left child
-        else if (n->left == nullptr && n->right != nullptr) {
-            n = std::move(n->right);
-
-            // return true;
-        }
+        else if (n->left == nullptr && n->right != nullptr) n = std::move(n->right);
         // Has both children
         else {
             // Find max element from left subtree
@@ -154,15 +131,16 @@ bool AVLTree<T>::remove(std::unique_ptr<TreeNode<T>>& n, const T& key) {
            
             // Propagate max value up
             n->element = max_val;
-
-            // balance(n);
-
-            // return true;
         }
 
-        balance(n);
-        return true;
+        remove_success = true;
     }
+
+    // Balance
+    if (n == nullptr) return remove_success;
+    balance(n);
+
+    return remove_success;
 }
 
 
