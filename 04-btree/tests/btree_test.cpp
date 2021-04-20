@@ -32,7 +32,9 @@ TEST_CASE("2-4 tree in-order traversal", "[btree]") {
 
     tree.for_all([&](int& i){ ys.push_back(i); });
 
-    REQUIRE(xs == ys);
+    REQUIRE(xs.size() == ys.size());
+    for (auto i = 0u; i < xs.size(); i++)
+        REQUIRE(xs[i] == ys[i]);
 }
 
 TEST_CASE("In-order traversal, and find_rightmost_key", "[btree]") {
@@ -58,7 +60,9 @@ TEST_CASE("In-order traversal, and find_rightmost_key", "[btree]") {
     /* Iterate over the B-tree. Are the elements sorted? */
     tree.for_all([&](int& i){ ys.push_back(i); });
 
-    REQUIRE(zs == ys);
+    REQUIRE(zs.size() == ys.size());
+    for (auto i = 0u; i < zs.size(); i++)
+        REQUIRE(zs[i] == ys[i]);
     REQUIRE(BTreeNode<int, 6>::find_rightmost_key(*(tree.root)) == N - 1);
 }
 

@@ -50,6 +50,9 @@ TEST_CASE("Inorder traversal", "[rbtree]") {
         zs.emplace_back(n->key);
     });
 
+    REQUIRE(zs[0] == ys[0]);
+    REQUIRE(zs[1] == ys[1]);
+    REQUIRE(zs[2] == ys[2]);
     REQUIRE(zs == ys);
 }
 
