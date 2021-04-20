@@ -1,7 +1,6 @@
 # HW #4: B-tree
 
-* **Due data: 11:59pm, mm/dd/2020**
-* TA: Seonghyun Park (shpark95@snu.ac.kr)
+* **Due data: 11:59pm, 5/9/2020**
 
 ## Goals
 
