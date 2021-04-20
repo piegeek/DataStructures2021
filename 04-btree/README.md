@@ -1,4 +1,4 @@
-# HW#3: B-tree
+# HW #4: B-tree
 
 * **Due data: 11:59pm, mm/dd/2020**
 * TA: Seonghyun Park (shpark95@snu.ac.kr)
@@ -283,12 +283,12 @@ Note 4 is moved to left.
 
 ### Testing your own programs
 
-In `03-btree` directory, you run the following commands to compile your own
+In `04-btree` directory, you run the following commands to compile your own
 implementation.
 
 ```
 $ pwd
-/xxx/xxx/xxx/03-btree
+/xxx/xxx/xxx/04-btree
 $ mkdir build
 $ cd build
 $ cmake ../
@@ -332,12 +332,11 @@ Prepare your submission with following commands:
 
 ```
 $ pwd
-03-btree
+04-btree
 $ ./prepare-submit.sh
 [*] Remove tar file...
 [*] Compress files...
-./include/deque.hpp
-./palindrome/include/palindrome.hpp
+./include/btree.hpp
 [*] Successfully Compressed!
 [*] Done! You are ready to submit
 ```

@@ -1,4 +1,4 @@
-# HW#4: Leaf-Leaning Red-Black Tree
+# HW #5: Leaf-Leaning Red-Black Tree
 
 * **Due data: 11:59pm, mm/dd/2020**
 * TA: Seonghyun Park (shpark95@snu.ac.kr)
@@ -135,12 +135,12 @@ to avoid null pointer dereferences.
 
 ### Testing your own programs
 
-In `04-rbtree` directory, you run the following commands to compile your own
+In `05-rbtree` directory, you run the following commands to compile your own
 implementation.
 
 ```
 $ pwd
-/xxx/xxx/xxx/04-rbtree
+/xxx/xxx/xxx/05-rbtree
 $ mkdir build
 $ cd build
 $ cmake ../
@@ -185,17 +185,16 @@ Prepare your submission with following commands:
 
 ```
 $ pwd
-04-rbtree
+05-rbtree
 $ ./prepare-submit.sh
 [*] Remove tar file...
 [*] Compress files...
-./include/deque.hpp
-./palindrome/include/palindrome.hpp
+./include/rbtree.hpp
 [*] Successfully Compressed!
 [*] Done! You are ready to submit
 ```
 
-Upload `assign4.tar.gz` to the submission server. The address of the submission
+Upload `assign5.tar.gz` to the submission server. The address of the submission
 server isn't changed since last assignment.
 
 ### Grading
