@@ -129,6 +129,44 @@ const std::optional<size_t> BTree<T, B>::depth() const {
 template<typename T, size_t B>
 bool BTreeNode<T, B>::insert(const T& t) {
     // TODO
+    size_t idx = get_index(t);
+
+    // Make sure the index is within the range
+    if (idx > 2 * B || idx < 0) {
+        // TODO: REMOVE LINE
+        std::cout << "Index out of range error" << std::endl;
+        return false;
+    }
+
+    // If internal node
+    if (type == NodeType::INTERNAL) {
+        // Check if child is full
+        if (edges[idx]->n == 2 * B - 1) {
+            split_child(*this, idx); 
+            // Change value of idx?
+        }
+
+        return edges[idx]->insert(t);
+    }
+    // If leaf node
+    if (type == NodeType::LEAF) {
+        // TODO: REMOVE LINE
+        if (n > 2 * B - 1) {
+            std::cout << "size of node larger than 2B-1 error" << std::endl;
+            // std::cout << "size of keys: " << keys.size() << "2 * B - 1: " << 2 * B - 1 << std::endl; <---- SPLITCHILD NOT YET IMPLEMENTED
+        }
+        // Shift every key after idx to the right
+        for (size_t i = n - 1; i <= idx; i--) {
+            keys[i+1] = keys[i];
+        }
+
+        // Insert
+        keys[idx] = t;
+        n++;
+
+        return true;
+    }
+
     return false;
 }
 
@@ -149,7 +187,14 @@ bool BTreeNode<T, B>::insert(const T& t) {
 template<typename T, size_t B>
 size_t BTreeNode<T, B>::get_index(const T& t) {
     // TODO
-    return 0;
+    // t is smaller than largest key
+    for (size_t i = 0; i < keys.size(); i++) {
+        if (t <= keys[i]) return i;
+        i++;
+    }
+
+    // t is greater than largest key
+    return keys.size();
 }
 
 // NOTE: `for_all` and `for_all_nodes` are used internally for testing.
@@ -195,6 +240,52 @@ void BTreeNode<T, B>::for_all_nodes(std::function<void(const BTreeNode<T,B>&)> f
 template<typename T, size_t B>
 void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     // TODO
+    // n == 2B - 1
+    BTreeNode<T, B>*& this_node = parent.edges[idx];
+
+    // Create new empty node
+    BTreeNode<T, B>* new_node_1 = new BTreeNode<T, B>();
+    BTreeNode<T, B>* new_node_2 = new BTreeNode<T, B>();
+    new_node_1->type = NodeType::LEAF;
+    new_node_2->type = NodeType::LEAF;
+
+    // Find middle item
+    T middle_item = this_node->keys[B - 1];
+
+    // Shift every key of the parent after idx to the right by 1
+    for (size_t i = this_node->n - 1; i >= idx; i--) {
+        parent.keys[i+1] = parent.keys[i];
+    }
+    
+    // Shift every edge of the parent after idx
+    for (size_t i = this_node->n; i >= idx + 1; i--) {
+        parent.edges[i+1] = parent.edges[i];
+    }
+    
+    // Insert middle item to parent
+    parent.keys[idx] = middle_item;
+
+    // Insert new empty node to parent
+    parent.edges[idx + 1] = new_node_2;
+    
+    parent.n++;
+
+    // Copy over keys from old leaf node to new node
+    for (size_t i = 0; i < B - 1; i++) {
+        new_node_1->keys[i] = this_node->keys[i];
+        new_node_1->n++;
+    }
+
+    for (size_t i = B; i < this_node->n; i++) {
+        new_node_2->keys[i - B] = this_node->keys[i];
+        new_node_2->n++;
+    }
+
+    // Swap old node and new node 1
+    BTreeNode<T, B>* old_node = this_node;
+    parent.edges[idx] = new_node_1;
+
+    delete old_node;
 }
 
 template<typename T, size_t B>
