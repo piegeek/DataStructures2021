@@ -18,6 +18,8 @@
 
 ## Left-Leaning Red-Black Tree
 
+![llrb](./rbtree.png)
+
 ### Background
 
 Red-black trees are famous variants of a balanced search tree. It is used
