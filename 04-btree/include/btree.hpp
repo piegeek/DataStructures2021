@@ -188,7 +188,7 @@ template<typename T, size_t B>
 size_t BTreeNode<T, B>::get_index(const T& t) {
     // TODO
     // t is smaller than largest key
-    for (size_t i = 0; i < keys.size(); i++) {
+    for (size_t i = 0; i < n; i++) {
         if (t <= keys[i]) return i;
         i++;
     }
