@@ -188,13 +188,20 @@ template<typename T, size_t B>
 size_t BTreeNode<T, B>::get_index(const T& t) {
     // TODO
     // t is smaller than largest key
+    // for (size_t i = 0; i < n; i++) {
+    //     if (t <= keys[i]) return i;
+    // }
+
+    // // t is greater than largest key
+    // return n;
+
+    size_t count = 0;
+
     for (size_t i = 0; i < n; i++) {
-        if (t <= keys[i]) return i;
-        i++;
+        if (t >= keys[i]) count++;
     }
 
-    // t is greater than largest key
-    return n;
+    return count;
 }
 
 // NOTE: `for_all` and `for_all_nodes` are used internally for testing.
@@ -246,8 +253,15 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     // Create new empty node
     BTreeNode<T, B>* new_node_1 = new BTreeNode<T, B>();
     BTreeNode<T, B>* new_node_2 = new BTreeNode<T, B>();
-    new_node_1->type = NodeType::LEAF;
-    new_node_2->type = NodeType::LEAF;
+    if (this_node->type == NodeType::LEAF) {
+        new_node_1->type = NodeType::LEAF;
+        new_node_2->type = NodeType::LEAF;
+    }
+    else {
+        new_node_1->type = NodeType::INTERNAL;
+        new_node_2->type = NodeType::INTERNAL;
+    }
+
 
     // Find middle item
     T middle_item = this_node->keys[B - 1];
