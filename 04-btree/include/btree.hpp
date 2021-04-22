@@ -156,7 +156,7 @@ bool BTreeNode<T, B>::insert(const T& t) {
             // std::cout << "size of keys: " << keys.size() << "2 * B - 1: " << 2 * B - 1 << std::endl; <---- SPLITCHILD NOT YET IMPLEMENTED
         }
         // Shift every key after idx to the right
-        for (int i = n - 1; i <= idx; i--) {
+        for (int i = n - 1; i >= idx; i--) {
             keys[i+1] = keys[i];
         }
 
