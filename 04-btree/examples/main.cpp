@@ -19,6 +19,18 @@ int main(int argc, char *argv[]) {
     for (auto i : xs)
         btree.insert(i);
 
+    // btree.insert(2);
+    // btree.insert(1);
+    // btree.insert(4);
+    // btree.insert(5);
+    // btree.insert(3);
+    // btree.insert(6);
+    // btree.insert(7);
+    // btree.insert(8);
+    // btree.insert(9);
+    // btree.insert(10);
+    // btree.insert(11);
+
     std::cout << btree.format() << '\n';
 
     return 0;

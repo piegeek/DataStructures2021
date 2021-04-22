@@ -194,7 +194,7 @@ size_t BTreeNode<T, B>::get_index(const T& t) {
     }
 
     // t is greater than largest key
-    return keys.size();
+    return n;
 }
 
 // NOTE: `for_all` and `for_all_nodes` are used internally for testing.
@@ -269,6 +269,7 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     parent.edges[idx + 1] = new_node_2;
     
     parent.n++;
+    parent.type = NodeType::INTERNAL;
 
     // Copy over keys from old leaf node to new node
     for (int i = 0; i < B - 1; i++) {
