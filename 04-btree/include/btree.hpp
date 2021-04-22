@@ -281,6 +281,15 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
         new_node_2->n++;
     }
 
+    // Copy over edges from old leaf node to new node
+    for (int i = 0; i <= B - 1; i++) {
+        new_node_1->edges[i] = this_node->edges[i];
+    }
+
+    for (int i = B; i <= this_node->n; i++) {
+        new_node_2->edges[i - B] = this_node->edges[i];
+    }
+
     // Swap old node and new node 1
     BTreeNode<T, B>* old_node = this_node;
     parent.edges[idx] = new_node_1;
