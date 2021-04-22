@@ -129,7 +129,7 @@ const std::optional<size_t> BTree<T, B>::depth() const {
 template<typename T, size_t B>
 bool BTreeNode<T, B>::insert(const T& t) {
     // TODO
-    size_t idx = get_index(t);
+    int idx = get_index(t);
 
     // Make sure the index is within the range
     if (idx > 2 * B || idx < 0) {
@@ -156,7 +156,7 @@ bool BTreeNode<T, B>::insert(const T& t) {
             // std::cout << "size of keys: " << keys.size() << "2 * B - 1: " << 2 * B - 1 << std::endl; <---- SPLITCHILD NOT YET IMPLEMENTED
         }
         // Shift every key after idx to the right
-        for (size_t i = n - 1; i <= idx; i--) {
+        for (int i = n - 1; i >= idx; i--) {
             keys[i+1] = keys[i];
         }
 
@@ -188,7 +188,7 @@ template<typename T, size_t B>
 size_t BTreeNode<T, B>::get_index(const T& t) {
     // TODO
     // t is smaller than largest key
-    for (size_t i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) {
         if (t <= keys[i]) return i;
         i++;
     }
@@ -253,12 +253,12 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     T middle_item = this_node->keys[B - 1];
 
     // Shift every key of the parent after idx to the right by 1
-    for (size_t i = this_node->n - 1; i >= idx; i--) {
+    for (int i = this_node->n - 1; i >= idx; i--) {
         parent.keys[i+1] = parent.keys[i];
     }
     
     // Shift every edge of the parent after idx
-    for (size_t i = this_node->n; i >= idx + 1; i--) {
+    for (int i = this_node->n; i >= idx + 1; i--) {
         parent.edges[i+1] = parent.edges[i];
     }
     
@@ -271,12 +271,12 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     parent.n++;
 
     // Copy over keys from old leaf node to new node
-    for (size_t i = 0; i < B - 1; i++) {
+    for (int i = 0; i < B - 1; i++) {
         new_node_1->keys[i] = this_node->keys[i];
         new_node_1->n++;
     }
 
-    for (size_t i = B; i < this_node->n; i++) {
+    for (int i = B; i < this_node->n; i++) {
         new_node_2->keys[i - B] = this_node->keys[i];
         new_node_2->n++;
     }
