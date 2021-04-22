@@ -188,7 +188,7 @@ template<typename T, size_t B>
 size_t BTreeNode<T, B>::get_index(const T& t) {
     // TODO
     // t is smaller than largest key
-    for (int i = 0; i < n; i++) {
+    for (size_t i = 0; i < n; i++) {
         if (t <= keys[i]) return i;
         i++;
     }
@@ -282,13 +282,8 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     }
 
     // Copy over edges from old leaf node to new node
-    for (int i = 0; i <= B - 1; i++) {
-        new_node_1->edges[i] = this_node->edges[i];
-    }
-
-    for (int i = B; i <= this_node->n; i++) {
-        new_node_2->edges[i - B] = this_node->edges[i];
-    }
+    for (int i = 0; i <= B - 1; i++)            new_node_1->edges[i] = this_node->edges[i];
+    for (int i = B; i <= this_node->n; i++) new_node_2->edges[i - B] = this_node->edges[i];
 
     // Swap old node and new node 1
     BTreeNode<T, B>* old_node = this_node;
@@ -467,7 +462,7 @@ std::vector<BTreeNode<T, B>*> BTreeNode<T, B>::find_nodes_at_level(size_t lv) co
 }
 
 template<typename T, size_t B>
-BTreeNode<T, B>::BTreeNode() : n(0), type(NodeType::LEAF) {}
+BTreeNode<T, B>::BTreeNode() : n(0), type(NodeType::LEAF), keys(), edges() {}
 
 template<typename T, size_t B>
 BTreeNode<T, B>::BTreeNode(const T& t) : n(1), type(NodeType::LEAF) {
