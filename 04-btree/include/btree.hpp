@@ -156,7 +156,7 @@ bool BTreeNode<T, B>::insert(const T& t) {
             // std::cout << "size of keys: " << keys.size() << "2 * B - 1: " << 2 * B - 1 << std::endl; <---- SPLITCHILD NOT YET IMPLEMENTED
         }
         // Shift every key after idx to the right
-        for (int i = n - 1; i >= idx; i--) {
+        for (int i = n - 1; i >= (int)idx; i--) {
             keys[i+1] = keys[i];
         }
 
@@ -253,12 +253,12 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     T middle_item = this_node->keys[B - 1];
 
     // Shift every key of the parent after idx to the right by 1
-    for (int i = this_node->n - 1; i >= idx; i--) {
+    for (int i = this_node->n - 1; i >= (int)idx; i--) {
         parent.keys[i+1] = parent.keys[i];
     }
     
     // Shift every edge of the parent after idx
-    for (int i = this_node->n; i >= idx + 1; i--) {
+    for (int i = this_node->n; i >= (int)idx + 1; i--) {
         parent.edges[i+1] = parent.edges[i];
     }
     
