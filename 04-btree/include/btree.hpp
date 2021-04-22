@@ -143,10 +143,15 @@ bool BTreeNode<T, B>::insert(const T& t) {
         // Check if child is full
         if (edges[idx]->n == 2 * B - 1) {
             split_child(*this, idx); 
-            // Change value of idx?
+            
+            // Change value of idx
+            int new_idx = get_index(t);
+            return edges[new_idx]->insert(t);
+        }
+        else {
+            return edges[idx]->insert(t);
         }
 
-        return edges[idx]->insert(t);
     }
     // If leaf node
     if (type == NodeType::LEAF) {
