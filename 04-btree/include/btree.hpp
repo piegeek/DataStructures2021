@@ -156,7 +156,7 @@ bool BTreeNode<T, B>::insert(const T& t) {
             // std::cout << "size of keys: " << keys.size() << "2 * B - 1: " << 2 * B - 1 << std::endl; <---- SPLITCHILD NOT YET IMPLEMENTED
         }
         // Shift every key after idx to the right
-        for (int i = n - 1; i >= (int)idx; i--) {
+        for (int i = n; i >= (int)idx; i--) {
             keys[i+1] = keys[i];
         }
 
@@ -462,7 +462,7 @@ std::vector<BTreeNode<T, B>*> BTreeNode<T, B>::find_nodes_at_level(size_t lv) co
 }
 
 template<typename T, size_t B>
-BTreeNode<T, B>::BTreeNode() : n(0), type(NodeType::LEAF), keys(), edges() {}
+BTreeNode<T, B>::BTreeNode() : n(0), type(NodeType::LEAF) {}
 
 template<typename T, size_t B>
 BTreeNode<T, B>::BTreeNode(const T& t) : n(1), type(NodeType::LEAF) {
