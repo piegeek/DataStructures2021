@@ -304,7 +304,7 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     BTreeNode<T, B>* old_node = this_node;
     parent.edges[idx] = new_node_1;
 
-    delete old_node;
+    // delete old_node;
 }
 
 template<typename T, size_t B>
