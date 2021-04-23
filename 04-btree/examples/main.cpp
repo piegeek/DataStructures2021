@@ -5,19 +5,19 @@
 #include "btree.hpp"
 
 int main(int argc, char *argv[]) {
-    BTree<int, 7> btree;
-    std::vector<int> xs;
+    BTree<int, 3> btree;
+    // std::vector<int> xs;
 
-    for (auto i = 1; i <= 10'000; i++)
-        xs.emplace_back(i);
+    // for (auto i = 1; i <= 10'000; i++)
+    //     xs.emplace_back(i);
 
-    std::random_device rd;
-    std::mt19937 g(rd());
+    // std::random_device rd;
+    // std::mt19937 g(rd());
 
-    std::shuffle(xs.begin(), xs.end(), g);
+    // std::shuffle(xs.begin(), xs.end(), g);
 
-    for (auto i : xs)
-        btree.insert(i);
+    // for (auto i : xs)
+    //     btree.insert(i);
 
     btree.insert(2);
     btree.insert(1);
