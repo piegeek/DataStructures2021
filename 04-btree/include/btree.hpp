@@ -310,7 +310,7 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     // parent.edges[idx] = new_node_1;
 
     this_node->n = B - 1;
-    new_node_2->n = B - 1
+    new_node_2->n = B - 1;
 
     // Clear edges and delete this_node
     // std::fill(std::begin(this_node->edges), std::end(this_node->edges), nullptr);
