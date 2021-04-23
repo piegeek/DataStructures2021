@@ -256,17 +256,8 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     BTreeNode<T, B>*& this_node = parent.edges[idx];
 
     // Create new empty node
-    // BTreeNode<T, B>* new_node_1 = new BTreeNode<T, B>();
-    BTreeNode<T, B>* new_node_2 = new BTreeNode<T, B>();
-    if (this_node->type == NodeType::LEAF) {
-        // new_node_1->type = NodeType::LEAF;
-        new_node_2->type = NodeType::LEAF;
-    }
-    else {
-        // new_node_1->type = NodeType::INTERNAL;
-        new_node_2->type = NodeType::INTERNAL;
-    }
-
+    BTreeNode<T, B>* new_node = new BTreeNode<T, B>();
+    new_node->type = this_node->type;
 
     // Find middle item
     T middle_item = this_node->keys[B - 1];
@@ -285,78 +276,19 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     parent.keys[idx] = middle_item;
 
     // Insert new empty node to parent
-    parent.edges[idx + 1] = new_node_2;
-    // parent.edges[idx + 1] = new_node;
+    parent.edges[idx + 1] = new_node;
     
     parent.n++;
     parent.type = NodeType::INTERNAL;
 
     // Copy over keys from old leaf node to new node
-    // for (int i = 0; i < B - 1; i++) {
-    //     new_node_1->keys[i] = this_node->keys[i];
-    //     new_node_1->n++;
-    // }
-
-    for (int i = B; i < this_node->n; i++) {
-        new_node_2->keys[i - B] = this_node->keys[i];
-        // new_node_2->n++;
-    }
+    for (int i = B; i < this_node->n; i++)  new_node->keys[i - B] = this_node->keys[i];
 
     // Copy over edges from old leaf node to new node
-    // for (int i = 0; i <= B - 1; i++)            new_node_1->edges[i] = this_node->edges[i];
-    for (int i = B; i <= this_node->n; i++) new_node_2->edges[i - B] = this_node->edges[i];
-
-    // Swap old node and new node 1
-    // parent.edges[idx] = new_node_1;
+    for (int i = B; i <= this_node->n; i++) new_node->edges[i - B] = this_node->edges[i];
 
     this_node->n = B - 1;
-    new_node_2->n = B - 1;
-
-    // Clear edges and delete this_node
-    // std::fill(std::begin(this_node->edges), std::end(this_node->edges), nullptr);
-    // delete this_node;
-
-    // NEW ALGO
-    // BTreeNode<T, B>* old_node = parent.edges[idx];
-    // BTreeNode<T, B>* new_node = new BTreeNode<T, B>();
-
-    // // New node is a leaf node old node was
-    // if (old_node->type == NodeType::LEAF) new_node->type = NodeType::LEAF;
-
-    // // Since the old node is full, new node must have B - 1 keys
-    // new_node->n = B - 1;
-
-    // // Copy over right half of old node to new node
-    // for (int i = 0; i < B - 1; i++) {
-    //     new_node->keys[i] = old_node->keys[i + B];
-    // }
-
-    // // Copy over child pointers if old node is internal
-    // if (old_node->type == NodeType::INTERNAL) {
-    //     for (int i = 0; i < B; i++) {
-    //         new_node->edges[i] = old_node->edges[i + B];
-    //     }
-    // }
-
-    // // Old node now has B - 1 keys
-    // old_node->n = B - 1;
-
-    // // Shift everything in parent over from idx + 1, then put new node in parent.edges[idx + 1]
-    // for (int i = parent.n + 1; i > idx; i--) {
-    //     parent.edges[i+1] = parent.edges[i];
-    // }
-
-    // parent.edges[idx + 1] = new_node;
-
-    // // Shift the keys of the parent as well
-    // for (int i = parent.n; i > idx - 1; i--) {
-    //     parent.keys[i+1] = parent.keys[i];
-    // }
-
-    // // Promote middle key of old node to parent
-    // parent.keys[idx] = old_node->keys[B];
-    // parent.n++;
-    // parent.type = NodeType::INTERNAL;
+    new_node->n = B - 1;
 }
 
 template<typename T, size_t B>
