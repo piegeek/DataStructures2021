@@ -350,7 +350,7 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     }
 
     // Promote middle key of old node to parent
-    parent.keys[idx] = old_node->keys[B - 1];
+    parent.keys[idx] = old_node->keys[B];
     parent.n++;
     parent.type = NodeType::INTERNAL;
 }
