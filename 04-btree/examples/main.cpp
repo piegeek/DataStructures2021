@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]) {
     BTree<int, 3> btree;
-    // std::vector<int> xs;
+    std::vector<int> xs;
 
     for (auto i = 1; i <= 10'000; i++)
         xs.emplace_back(i);
