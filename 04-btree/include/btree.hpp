@@ -263,12 +263,12 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     T middle_item = this_node->keys[B - 1];
 
     // Shift every key of the parent after idx to the right by 1
-    for (int i = this_node->n - 1; i >= (int)idx; i--) {
+    for (int i = parent.n - 1; i >= (int)idx; i--) {
         parent.keys[i+1] = parent.keys[i];
     }
     
     // Shift every edge of the parent after idx
-    for (int i = this_node->n - 1; i >= (int)idx + 1; i--) {
+    for (int i = parent.n; i >= (int)idx + 1; i--) {
         parent.edges[i+1] = parent.edges[i];
     }
     
