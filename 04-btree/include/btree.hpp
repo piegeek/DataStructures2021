@@ -268,7 +268,7 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     }
     
     // Shift every edge of the parent after idx
-    for (int i = this_node->n; i >= (int)idx + 1; i--) {
+    for (int i = this_node->n - 1; i >= (int)idx + 1; i--) {
         parent.edges[i+1] = parent.edges[i];
     }
     
