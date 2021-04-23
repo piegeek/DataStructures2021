@@ -306,10 +306,11 @@ void BTreeNode<T, B>::split_child(BTreeNode<T, B>& parent, size_t idx) {
     for (int i = B; i <= this_node->n; i++) new_node_2->edges[i - B] = this_node->edges[i];
 
     // Swap old node and new node 1
-    BTreeNode<T, B>* old_node = this_node;
     parent.edges[idx] = new_node_1;
 
-    // delete old_node;
+    // Clear edges and delete this_node
+    std::fill(std::begin(this_node->edges), std::end(this_node->edges), nullptr);
+    delete this_node;
 }
 
 template<typename T, size_t B>
