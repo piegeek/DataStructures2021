@@ -369,7 +369,13 @@ bool BTreeNode<T, B>::remove(const T& t) {
         }
         
         if (edges[idx]->n < B - 1) {
-            try_borrow_from_sibling(*this, idx);
+            if (edges[idx + 1]->n < B - 1) {
+                if (idx == n) merge_children(*this, idx - 1);
+                else merge_children(*this, idx);
+            }
+            else {
+                try_borrow_from_sibling(*this, idx);
+            }
         }    
         
         return success;
@@ -395,10 +401,6 @@ bool BTreeNode<T, B>::try_borrow_from_sibling(BTreeNode<T, B>&node, size_t e) {
     }
     else if (e < node.n && node.edges[e + 1]->n >= B - 1) {
         return borrow_from_right(node, e);
-    }
-    else {
-        if (e == node.n) return merge_children(node, e - 1);
-        else return merge_children(node, e);
     }
 }
 
