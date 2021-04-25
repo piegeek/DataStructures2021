@@ -5,37 +5,29 @@
 #include "btree.hpp"
 
 int main(int argc, char *argv[]) {
-    BTree<int, 3> btree;
-    std::vector<int> xs;
+    BTree<int, 2> tree;
+    size_t N = 100'000;
 
-    // for (auto i = 1; i <= 10000; i++)
-    //     xs.emplace_back(i);
+    std::vector<int> xs, ys;
 
-    // std::random_device rd;
-    // std::mt19937 g(rd());
-
-    // std::shuffle(xs.begin(), xs.end(), g);
-
-    // for (auto i : xs)
-    //     btree.insert(i);
-
-    // std::shuffle(xs.begin(), xs.end(), g);
-
-    // for (auto i : xs) {
-    //     btree.remove(i);
-    // }
-
-    for (auto i = 1; i <= 10; i++) {
-        btree.insert(i);
+    for (auto i = 1; i <= N; i++) {
+        xs.push_back(i);
+        ys.push_back(i);
     }
 
-    std::cout << btree.format() << std::endl;
+    std::random_device rd;
+    std::mt19937 g(rd());
 
-    for (auto i = 1; i <= 10; i++) {
-        btree.remove(i);
+    std::shuffle(xs.begin(), xs.end(), g);
+    std::shuffle(ys.begin(), ys.end(), g);
 
-        std::cout << btree.format() << std::endl;
-    }
+    for (auto i : xs)
+        tree.insert(i);
+
+    for (auto i : ys)
+        tree.remove(i);
+
+    // REQUIRE(tree.root->n == 0);
     
     return 0;
 }
