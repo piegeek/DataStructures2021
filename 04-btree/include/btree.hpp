@@ -368,14 +368,12 @@ bool BTreeNode<T, B>::remove(const T& t) {
             success = edges[idx]->remove(t);
         }
         
-        if (edges[idx]->n < B - 1) {
-            if (edges[idx + 1]->n < B - 1) {
-                if (idx == n) merge_children(*this, idx - 1);
-                else merge_children(*this, idx);
-            }
-            else {
-                try_borrow_from_sibling(*this, idx);
-            }
+        if (idx <= n && edges[idx]->n <= B - 1 && edges[idx + 1]->n <= B - 1) {
+            if (idx == n) merge_children(*this, idx - 1);
+            else merge_children(*this, idx);
+        }
+        else if (edges[idx]->n < B - 1) {
+            try_borrow_from_sibling(*this, idx);
         }    
         
         return success;
