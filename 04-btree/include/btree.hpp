@@ -340,7 +340,7 @@ bool BTreeNode<T, B>::remove(const T& t) {
 
     }
     // Match not found -> traverse down
-    else {
+    else if (type == NodeType::INTERNAL) {
         bool success = edges[idx]->remove(t);
 
         // Balance
@@ -359,6 +359,7 @@ bool BTreeNode<T, B>::remove(const T& t) {
 
         return success;
     }
+    else return false;
 }
 
 template<typename T, size_t B>
