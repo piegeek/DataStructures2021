@@ -536,7 +536,7 @@ bool BTreeNode<T, B>::merge_children(BTreeNode<T, B> & node, size_t idx) {
     child->n += (right_child->n + 1);
     node.n--;
 
-    delete right_child;
+    // delete right_child;
     return true;
 
     // // Copy keys in left child to new node
