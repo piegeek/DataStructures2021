@@ -40,11 +40,15 @@ int main(int argc, char *argv[]) {
     
     btree.remove(7);
 
-    // std::cout << btree.format() << '\n';
+    std::cout << btree.format() << '\n';
     
-    // btree.remove(9);
+    btree.remove(8);
 
-    // std::cout << btree.format() << '\n';
+    std::cout << btree.format() << '\n';
+    
+    btree.remove(2);
+
+    std::cout << btree.format() << '\n';
 
     return 0;
 }
