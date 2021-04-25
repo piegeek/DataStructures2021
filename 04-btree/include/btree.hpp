@@ -438,7 +438,7 @@ template<typename T, size_t B>
 bool BTreeNode<T, B>::borrow_from_right(BTreeNode<T, B>& node, size_t edge) {
     // TODO
     BTreeNode<T, B>* child       = node.edges[edge];
-    BTreeNode<T, B>* right_child = node.edges[edge - 1];
+    BTreeNode<T, B>* right_child = node.edges[edge + 1];
 
     child->keys[child->n] = node.keys[edge];
     child->n++;
@@ -446,8 +446,8 @@ bool BTreeNode<T, B>::borrow_from_right(BTreeNode<T, B>& node, size_t edge) {
     node.keys[edge] = right_child->keys[0];
     
     // Shift keys of right child by 1 to the left
-    for (int i = right_child->n - 1; i > 0; i--) {
-        right_child->keys[i - 1] = right_child->keys[i];
+    for (int i = 0; i < right_child->n - 1; i++) {
+        right_child->keys[i] = right_child->keys[i + 1];
     }
 
     right_child->n--;
