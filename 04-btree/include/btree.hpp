@@ -440,7 +440,7 @@ bool BTreeNode<T, B>::borrow_from_left(BTreeNode<T, B>& node, size_t edge) {
     BTreeNode<T, B>* left_child = node.edges[edge - 1];
 
     // Shift child node keys by 1
-    for (int i = node.n - 1; i >= 0; i++) {
+    for (int i = child->n - 1; i > 0; i++) {
         child->keys[i + 1] = child->keys[i];
     }
 
