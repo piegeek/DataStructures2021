@@ -8,21 +8,23 @@ int main(int argc, char *argv[]) {
     BTree<int, 3> btree;
     std::vector<int> xs;
 
-    for (auto i = 1; i <= 100; i++)
+    for (auto i = 1; i <= 10; i++)
         xs.emplace_back(i);
 
     std::random_device rd;
     std::mt19937 g(rd());
 
-    std::shuffle(xs.begin(), xs.end(), g);
+    // std::shuffle(xs.begin(), xs.end(), g);
 
     for (auto i : xs)
         btree.insert(i);
 
-    std::shuffle(xs.begin(), xs.end(), g);
+    std::sort(xs.begin(), xs.end()) ;
 
-    for (auto i : xs)
+    for (auto i : xs) {
         btree.remove(i);
+        std::cout << btree.format() << std::endl;
+    }
     
     return 0;
 }

@@ -346,15 +346,24 @@ bool BTreeNode<T, B>::remove(const T& t) {
         // Balance
         if (edges[idx]->n < B - 1) {
             // Merge or Borrow
-            if (idx > 0) {
-                BTreeNode<T, B>* left_child  = edges[idx - 1];
-                if (left_child->n > B - 1) return borrow_from_left(*this, idx);
-            }
-            if (idx < n) {
-                BTreeNode<T, B>* right_child = edges[idx + 1];
+            BTreeNode<T, B>* child = edges[idx];
+            BTreeNode<T, B>* left_child;
+            BTreeNode<T, B>* right_child;
+            
+            if (idx == 0) {
+                right_child = edges[1];
                 if (right_child->n > B - 1) return borrow_from_right(*this, idx);
+                else return merge_children(*this, idx);
             }
-            if (edges[idx + 1]->n == B - 1) return merge_children(*this, idx);
+            else if (idx > 0 && idx < n) {                    
+                left_child = edges[idx - 1];
+                right_child = edges[idx + 1];
+
+                if (left_child->n > B - 1) return borrow_from_left(*this, idx);
+                else if (right_child->n > B - 1) return borrow_from_right(*this, idx);
+                else return merge_children(*this, idx);
+            }
+            else return false;
         }
 
         return success;
