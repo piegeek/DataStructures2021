@@ -324,7 +324,7 @@ bool BTreeNode<T, B>::remove(const T& t) {
 
             return true;
         }
-        else if (type == NodeType::INTERNAL) {
+        else if (type == NodeType::INTERNAL && idx < n) {
             BTreeNode<T, B>* predecessor = edges[idx];
             BTreeNode<T, B>* successor   = edges[idx + 1];
 
