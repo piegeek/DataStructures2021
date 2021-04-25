@@ -19,36 +19,47 @@ int main(int argc, char *argv[]) {
     // for (auto i : xs)
     //     btree.insert(i);
 
-    btree.insert(2);
-    btree.insert(1);
-    btree.insert(4);
-    btree.insert(5);
-    btree.insert(3);
-    btree.insert(6);
-    btree.insert(7);
-    btree.insert(8);
-    btree.insert(9); // **k
+    // btree.insert(2);
+    // btree.insert(1);
+    // btree.insert(4);
+    // btree.insert(5);
+    // btree.insert(3);
+    // btree.insert(6);
+    // btree.insert(7);
+    // btree.insert(8);
+    // btree.insert(9); // **k
+    // btree.insert(10);
+    // btree.insert(11);
+    // btree.insert(12);
+
+    // std::cout << btree.format() << '\n';
+
+    // btree.remove(3);
+
+    // std::cout << btree.format() << '\n';
+    
+    // btree.remove(7);
+
+    // std::cout << btree.format() << '\n';
+    
+    // btree.remove(8);
+
+    // std::cout << btree.format() << '\n';
+    
+    // btree.remove(2);
+
+    btree.insert(20);
     btree.insert(10);
-    btree.insert(11);
-    btree.insert(12);
+    btree.insert(35);
+    btree.insert(5);
+    btree.insert(15);
+    btree.insert(30);
+    btree.insert(70);
 
     std::cout << btree.format() << '\n';
 
-    btree.remove(3);
+    btree.remove(10);
 
     std::cout << btree.format() << '\n';
-    
-    btree.remove(7);
-
-    std::cout << btree.format() << '\n';
-    
-    btree.remove(8);
-
-    std::cout << btree.format() << '\n';
-    
-    btree.remove(2);
-
-    std::cout << btree.format() << '\n';
-
     return 0;
 }
