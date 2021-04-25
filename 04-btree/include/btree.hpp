@@ -360,18 +360,18 @@ bool BTreeNode<T, B>::remove(const T& t) {
 
         bool flag = (idx == n);
         bool success;
-        
+
         if (flag && idx > n) {
             success = edges[idx - 1]->remove(t);
         }
         else {
             success = edges[idx]->remove(t);
         }
-
+        
         if (edges[idx]->n < B - 1) {
             try_borrow_from_sibling(*this, idx);
         }    
-
+        
         return success;
     }
 }
