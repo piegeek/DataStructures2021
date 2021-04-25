@@ -23,7 +23,6 @@ int main(int argc, char *argv[]) {
 
     for (auto i : xs) {
         btree.remove(i);
-        std::cout << btree.format() << std::endl;
     }
     
     return 0;
