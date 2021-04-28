@@ -70,8 +70,10 @@ struct BTreeNode {
     static bool borrow_from_left(BTreeNode<T, B>&, size_t);
 
     // Custom func
-    static bool borrow_from_successor(BTreeNode<T, B>&, size_t);
-    static bool borrow_from_predecessor(BTreeNode<T, B>&, size_t);
+    static T borrow_from_successor(BTreeNode<T, B>&, size_t);
+    static T borrow_from_predecessor(BTreeNode<T, B>&, size_t);
+    static bool remove_from_leaf(BTreeNode<T, B>&, size_t);
+    static bool remove_from_internal(BTreeNode<T, B>&, size_t);
     static void balance(BTreeNode<T, B>&, size_t);
 
     /* NOTE: If the root node has only one key, it will be empty after
@@ -198,14 +200,19 @@ size_t BTreeNode<T, B>::get_index(const T& t) {
     // // t is greater than largest key
     // return n;
 
-    size_t count = 0;
+    // size_t count = 0;
 
-    for (size_t i = 0; i < n; i++) {
-        if (t == keys[i]) return count;
-        if (t > keys[i]) count++;
-    }
+    // for (size_t i = 0; i < n; i++) {
+    //     if (t == keys[i]) return count;
+    //     if (t > keys[i]) count++;
+    // }
 
-    return count;
+    // return count;
+
+    int idx = 0;
+    while (idx < n && keys[idx] < t)
+        ++idx;
+    return idx;
 }
 
 // NOTE: `for_all` and `for_all_nodes` are used internally for testing.
@@ -314,75 +321,139 @@ bool BTreeNode<T, B>::remove(const T& t) {
 
     int idx = get_index(t);
 
-    // Match found
-    if (keys[idx] == t && idx < n) {
-        if (type == NodeType::LEAF) {
-            for (int i = idx; i < n - 1; i++) {
-                keys[i] = keys[i + 1];
-            }
-            n--;
-
-            return true;
-        }
-        else if (type == NodeType::INTERNAL) {
-            if (edges[idx]->n  >= B - 1) {                      
-                // Get predecessor
-                BTreeNode<T, B>* np = edges[idx];
-                while(np->type != NodeType::LEAF) {
-                    np = np->edges[np->n];
-                }
-
-                T predecessor = np->keys[np->n - 1];
-                keys[idx] = predecessor;
-                return edges[idx]->remove(predecessor);
-            } 
-            else if (edges[idx + 1]->n >= B - 1) {
-                // Get successor
-                BTreeNode<T, B>* np = edges[idx + 1];
-                while(np->type != NodeType::LEAF) {
-                    np = np->edges[0];
-                }
-
-                T successor = np->keys[0];
-                keys[idx + 1] = successor;
-                return edges[idx + 1]->remove(successor);
-            }
-            else {
-                merge_children(*this, idx);
-                return edges[idx]->remove(t);
-            }
-
-        }
-
+    if (idx < n && keys[idx] == t)
+    {
+        if (type == NodeType::LEAF)
+            return remove_from_leaf(*this, idx);
+        else
+            return remove_from_internal(*this, idx);
     }
-    else {
-        if (type == NodeType::LEAF) return false;
-
-        bool flag = (idx == n);
-        bool success;
-
-        if (flag && idx > n) {
-            success = edges[idx - 1]->remove(t);
-        }
-        else {
-            success = edges[idx]->remove(t);
-        }
-        
-        if (idx == n) {
-            if (edges[n - 1]->n <= B - 1 && edges[n]->n <= B - 1) {
-                merge_children(*this, n - 1);
-            }
-        }
-        else if (edges[idx]->n <= B - 1 && edges[idx + 1]->n <= B - 1) {
-            merge_children(*this, idx);
+    else
+    {
+        if (type == NodeType::LEAF)
+        {
+            // std::cout << "The key " << t << " is does not exist in the tree\n";
+            return false;
         }
 
-        if (edges[idx]->n < B - 1) {
+        bool flag = ((idx == n) ? true : false);
+
+        if (edges[idx]->n < B - 1)
             try_borrow_from_sibling(*this, idx);
-        }    
-        
-        return success;
+
+        if (flag && idx > n)
+            return edges[idx - 1]->remove(t);
+        else
+            return edges[idx]->remove(t);
     }
+
+    // int idx = get_index(t);
+
+    // // Match found
+    // if (keys[idx] == t && idx < n) {
+    //     if (type == NodeType::LEAF) {
+    //         for (int i = idx; i < n - 1; i++) {
+    //             keys[i] = keys[i + 1];
+    //         }
+    //         n--;
+
+    //         return true;
+    //     }
+    //     else if (type == NodeType::INTERNAL) {
+    //         if (edges[idx]->n  >= B - 1) {                      
+    //             // Get predecessor
+    //             BTreeNode<T, B>* np = edges[idx];
+    //             while(np->type != NodeType::LEAF) {
+    //                 np = np->edges[np->n];
+    //             }
+
+    //             T predecessor = np->keys[np->n - 1];
+    //             keys[idx] = predecessor;
+    //             return edges[idx]->remove(predecessor);
+    //         } 
+    //         else if (edges[idx + 1]->n >= B - 1) {
+    //             // Get successor
+    //             BTreeNode<T, B>* np = edges[idx + 1];
+    //             while(np->type != NodeType::LEAF) {
+    //                 np = np->edges[0];
+    //             }
+
+    //             T successor = np->keys[0];
+    //             keys[idx + 1] = successor;
+    //             return edges[idx + 1]->remove(successor);
+    //         }
+    //         else {
+    //             merge_children(*this, idx);
+    //             return edges[idx]->remove(t);
+    //         }
+
+    //     }
+
+    // }
+    // else {
+    //     if (type == NodeType::LEAF) return false;
+
+    //     bool flag = (idx == n);
+    //     bool success;
+
+    //     if (flag && idx > n) {
+    //         success = edges[idx - 1]->remove(t);
+    //     }
+    //     else {
+    //         success = edges[idx]->remove(t);
+    //     }
+        
+    //     if (idx == n) {
+    //         if (edges[n - 1]->n <= B - 1 && edges[n]->n <= B - 1) {
+    //             merge_children(*this, n - 1);
+    //         }
+    //     }
+    //     else if (edges[idx]->n <= B - 1 && edges[idx + 1]->n <= B - 1) {
+    //         merge_children(*this, idx);
+    //     }
+
+    //     if (edges[idx]->n < B - 1) {
+    //         try_borrow_from_sibling(*this, idx);
+    //     }    
+        
+    //     return success;
+    // }
+}
+
+template<typename T, size_t B>
+bool BTreeNode<T, B>::remove_from_leaf(BTreeNode<T, B>&node, size_t idx) {
+    for (int i = idx + 1; i < node.n; ++i)
+    node.keys[i - 1] = node.keys[i];
+
+    node.n--;
+
+    return true;
+}
+
+template<typename T, size_t B>
+bool BTreeNode<T, B>::remove_from_internal(BTreeNode<T, B>&node, size_t idx) {
+    int k = node.keys[idx];
+
+    if (node.edges[idx]->n >= B - 1)
+    {
+        int pred = borrow_from_predecessor(node, idx);
+        node.keys[idx] = pred;
+        node.edges[idx]->remove(pred);
+    }
+
+    else if (node.edges[idx + 1]->n >= B - 1)
+    {
+        int succ = borrow_from_successor(node, idx);
+        node.keys[idx] = succ;
+        node.edges[idx + 1]->remove(succ);
+    }
+
+    else
+    {
+        merge_children(node, idx);
+        node.edges[idx]->remove(k);
+    }
+    return true;
 }
 
 template<typename T, size_t B>
@@ -399,145 +470,246 @@ void BTreeNode<T, B>::balance(BTreeNode<T, B>&node, size_t e) {
 template<typename T, size_t B>
 bool BTreeNode<T, B>::try_borrow_from_sibling(BTreeNode<T, B>&node, size_t e) {
     // TODO
-    if (e > 0 && node.edges[e - 1]->n >= B - 1) {
-        return borrow_from_left(node, e);
+    if (e!= 0 && node.edges[e - 1]->n >= B - 1)
+        borrow_from_left(node, e);
+
+    else if (e != node.n && node.edges[e + 1]->n >= B - 1)
+        borrow_from_right(node, e);
+
+    else
+    {
+        if (e != node.n)
+            merge_children(node, e);
+        else
+            merge_children(node, e - 1);
     }
-    else if (e < node.n && node.edges[e + 1]->n >= B - 1) {
-        return borrow_from_right(node, e);
-    }
+    return true;
+
+    // if (e > 0 && node.edges[e - 1]->n >= B - 1) {
+    //     return borrow_from_left(node, e);
+    // }
+    // else if (e < node.n && node.edges[e + 1]->n >= B - 1) {
+    //     return borrow_from_right(node, e);
+    // }
 }
 
 template<typename T, size_t B>
-bool BTreeNode<T, B>::borrow_from_successor(BTreeNode<T, B>& node, size_t edge) {
+T BTreeNode<T, B>::borrow_from_successor(BTreeNode<T, B>& node, size_t edge) {
     // TODO
-    BTreeNode<T, B>* right_child = node.edges[edge + 1];
-    node.keys[edge] = right_child->keys[0];
+    BTreeNode<T, B>* cur = node.edges[edge + 1];
+    while (cur->type != NodeType::LEAF)
+        cur = cur->edges[0];
 
-    // Shift left by 1
-    for (int i = 0; i < right_child->n - 1; i++) {
-        right_child->keys[i] = right_child->keys[i + 1];
-    }
-    for (int i = 0; i < right_child->n; i++) {
-        right_child->edges[i] = right_child->edges[i + 1];
-    }
+    return cur->keys[0];
 
-    right_child->n--;
+    // BTreeNode<T, B>* right_child = node.edges[edge + 1];
+    // node.keys[edge] = right_child->keys[0];
 
-    return true;
+    // // Shift left by 1
+    // for (int i = 0; i < right_child->n - 1; i++) {
+    //     right_child->keys[i] = right_child->keys[i + 1];
+    // }
+    // for (int i = 0; i < right_child->n; i++) {
+    //     right_child->edges[i] = right_child->edges[i + 1];
+    // }
+
+    // right_child->n--;
+
+    // return true;
 }
 
 template<typename T, size_t B>
-bool BTreeNode<T, B>::  borrow_from_predecessor(BTreeNode<T, B>& node, size_t edge) {
+T BTreeNode<T, B>::  borrow_from_predecessor(BTreeNode<T, B>& node, size_t edge) {
     // TODO
-    BTreeNode<T, B>* child = node.edges[edge];
-    node.keys[edge] = child->keys[child->n - 1];
+    BTreeNode<T, B>* cur = node.edges[edge];
+    while (cur->type != NodeType::LEAF)
+        cur = cur->edges[cur->n];
 
-    child->n--;
+    return cur->keys[cur->n - 1];
 
-    return true;
+    // BTreeNode<T, B>* child = node.edges[edge];
+    // node.keys[edge] = child->keys[child->n - 1];
+
+    // child->n--;
+
+    // return true;
 }
 
 template<typename T, size_t B>
 bool BTreeNode<T, B>::borrow_from_left(BTreeNode<T, B>& node, size_t edge) {
     // TODO
-    BTreeNode<T, B>* child      = node.edges[edge];
-    BTreeNode<T, B>* left_child = node.edges[edge - 1];
+    BTreeNode<T, B> *child = node.edges[edge];
+    BTreeNode<T, B> *sibling = node.edges[edge - 1];
 
-    // Shift child node keys by 1 to the right
-    for (int i = child->n - 1; i >= 0; i--) {
+    for (int i = child->n - 1; i >= 0; --i)
         child->keys[i + 1] = child->keys[i];
-    }
 
-    // If child is not a leaf shift pointers to the right
-    if (child->type != NodeType::LEAF) {
-        for (int i = child->n; i >= 0; i--) {
+    if (child->type != NodeType::LEAF)
+    {
+        for (int i = child->n; i >= 0; --i)
             child->edges[i + 1] = child->edges[i];
-        }
     }
 
     child->keys[0] = node.keys[edge - 1];
-    // Move left child's last edge as child's first edge
-    if (child->type != NodeType::LEAF) {
-        child->edges[0] = left_child->edges[left_child->n];
-    }
-    
-    node.keys[edge - 1] = left_child->keys[left_child->n - 1];
-    child->n++;
-    left_child->n--;
+
+    if (child->type != NodeType::LEAF)
+        child->edges[0] = sibling->edges[sibling->n];
+
+    node.keys[edge - 1] = sibling->keys[sibling->n - 1];
+
+    child->n += 1;
+    sibling->n -= 1;
 
     return true;
+
+    // BTreeNode<T, B>* child      = node.edges[edge];
+    // BTreeNode<T, B>* left_child = node.edges[edge - 1];
+
+    // // Shift child node keys by 1 to the right
+    // for (int i = child->n - 1; i >= 0; i--) {
+    //     child->keys[i + 1] = child->keys[i];
+    // }
+
+    // // If child is not a leaf shift pointers to the right
+    // if (child->type != NodeType::LEAF) {
+    //     for (int i = child->n; i >= 0; i--) {
+    //         child->edges[i + 1] = child->edges[i];
+    //     }
+    // }
+
+    // child->keys[0] = node.keys[edge - 1];
+    // // Move left child's last edge as child's first edge
+    // if (child->type != NodeType::LEAF) {
+    //     child->edges[0] = left_child->edges[left_child->n];
+    // }
+    
+    // node.keys[edge - 1] = left_child->keys[left_child->n - 1];
+    // child->n++;
+    // left_child->n--;
+
+    // return true;
 }
 
 template<typename T, size_t B>
 bool BTreeNode<T, B>::borrow_from_right(BTreeNode<T, B>& node, size_t edge) {
     // TODO
-    BTreeNode<T, B>* child       = node.edges[edge];
-    BTreeNode<T, B>* right_child = node.edges[edge + 1];
+    BTreeNode<T, B> *child = node.edges[edge];
+    BTreeNode<T, B> *sibling = node.edges[edge + 1];
 
-    child->keys[child->n] = node.keys[edge];
+    child->keys[(child->n)] = node.keys[edge];
 
-    // Right child's first edge is inserted as the last edge of child
-    if (child->type != NodeType::LEAF) {
-        child->edges[child->n + 1] = right_child->edges[0];
+    if (child->type != NodeType::LEAF)
+        child->edges[(child->n) + 1] = sibling->edges[0];
+
+    node.keys[edge] = sibling->keys[0];
+
+    for (int i = 1; i < sibling->n; ++i)
+        sibling->keys[i - 1] = sibling->keys[i];
+
+    if (sibling->type != NodeType::LEAF)
+    {
+        for (int i = 1; i <= sibling->n; ++i)
+            sibling->edges[i - 1] = sibling->edges[i];
     }
 
-    node.keys[edge] = right_child->keys[0];
-    
-    // Shift keys of right child by 1 to the left
-    for (int i = 0; i < right_child->n - 1; i++) {
-        right_child->keys[i] = right_child->keys[i + 1];
-    }
-
-    // Shift edges by 1 to the left
-    if (right_child->type != NodeType::LEAF) {
-        for (int i = 0; i < right_child->n; i++) {
-            right_child->edges[i] = right_child->edges[i + 1];
-        }
-    }
-
-    child->n++;
-    right_child->n--;
+    child->n += 1;
+    sibling->n -= 1;
 
     return true;
+
+    // BTreeNode<T, B>* child       = node.edges[edge];
+    // BTreeNode<T, B>* right_child = node.edges[edge + 1];
+
+    // child->keys[child->n] = node.keys[edge];
+
+    // // Right child's first edge is inserted as the last edge of child
+    // if (child->type != NodeType::LEAF) {
+    //     child->edges[child->n + 1] = right_child->edges[0];
+    // }
+
+    // node.keys[edge] = right_child->keys[0];
+    
+    // // Shift keys of right child by 1 to the left
+    // for (int i = 0; i < right_child->n - 1; i++) {
+    //     right_child->keys[i] = right_child->keys[i + 1];
+    // }
+
+    // // Shift edges by 1 to the left
+    // if (right_child->type != NodeType::LEAF) {
+    //     for (int i = 0; i < right_child->n; i++) {
+    //         right_child->edges[i] = right_child->edges[i + 1];
+    //     }
+    // }
+
+    // child->n++;
+    // right_child->n--;
+
+    // return true;
 }
 
 template<typename T, size_t B>
 bool BTreeNode<T, B>::merge_children(BTreeNode<T, B> & node, size_t idx) {
     // TODO
-    // BTreeNode<T, B>* new_node = new BTreeNode<T, B>();
-    BTreeNode<T, B>* child  = node.edges[idx];
-    BTreeNode<T, B>* right_child = node.edges[idx + 1];
+    BTreeNode<T, B> *child = node.edges[idx];
+    BTreeNode<T, B> *sibling = node.edges[idx + 1];
 
     child->keys[B - 2] = node.keys[idx];
 
-    // Copy keys from right_child to child
-    for (int i = 0; i < right_child->n; i++) {
-        child->keys[i + B - 1] = right_child->keys[i];
+    for (int i = 0; i < sibling->n; ++i)
+        child->keys[i + B - 1] = sibling->keys[i];
+
+    if (child->type != NodeType::LEAF)
+    {
+        for (int i = 0; i <= sibling->n; ++i)
+            child->edges[i + B - 1] = sibling->edges[i];
     }
 
-    // Copy edges from right_child to child
-    if (child->type != NodeType::LEAF) {
-        for (int i = 0; i < right_child->n + 1; i++) {
-            child->edges[i + B - 1] = right_child->edges[i];
-        }
-    }
-
-    // Shift all keys in node to the left by 1
-    for (int i = idx + 1; i < node.n; i++) {
+    for (int i = idx + 1; i < node.n; ++i)
         node.keys[i - 1] = node.keys[i];
-    }
 
-    // Shift edges to the left by 1
-    for (int i = idx + 2; i < node.n + 1; i++) {
+    for (int i = idx + 2; i <= node.n; ++i)
         node.edges[i - 1] = node.edges[i];
-    }
 
-    // Update key count of child and node
-    child->n += (right_child->n + 1);
+    child->n += sibling->n + 1;
     node.n--;
 
-    // delete right_child;
+    delete sibling;
     return true;
+
+    // BTreeNode<T, B>* new_node = new BTreeNode<T, B>();
+    // BTreeNode<T, B>* child  = node.edges[idx];
+    // BTreeNode<T, B>* right_child = node.edges[idx + 1];
+
+    // child->keys[B - 2] = node.keys[idx];
+
+    // // Copy keys from right_child to child
+    // for (int i = 0; i < right_child->n; i++) {
+    //     child->keys[i + B - 1] = right_child->keys[i];
+    // }
+
+    // // Copy edges from right_child to child
+    // if (child->type != NodeType::LEAF) {
+    //     for (int i = 0; i < right_child->n + 1; i++) {
+    //         child->edges[i + B - 1] = right_child->edges[i];
+    //     }
+    // }
+
+    // // Shift all keys in node to the left by 1
+    // for (int i = idx + 1; i < node.n; i++) {
+    //     node.keys[i - 1] = node.keys[i];
+    // }
+
+    // // Shift edges to the left by 1
+    // for (int i = idx + 2; i < node.n + 1; i++) {
+    //     node.edges[i - 1] = node.edges[i];
+    // }
+
+    // // Update key count of child and node
+    // child->n += (right_child->n + 1);
+    // node.n--;
+
+    // // delete right_child;
+    // return true;
 
     // // Copy keys in left child to new node
     // for (int i = 0; i < left_child->n; i++) {
