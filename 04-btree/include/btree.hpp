@@ -675,7 +675,7 @@ bool BTreeNode<T, B>::merge_children(BTreeNode<T, B> & node, size_t idx) {
     child->n += sibling->n + 1;
     node.n--;
 
-    delete sibling;
+    // delete sibling;
     return true;
 
     // BTreeNode<T, B>* new_node = new BTreeNode<T, B>();
