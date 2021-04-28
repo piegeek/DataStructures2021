@@ -325,7 +325,7 @@ bool BTreeNode<T, B>::remove(const T& t) {
     {
         if (type == NodeType::LEAF)
             return remove_from_leaf(*this, idx);
-        else
+        else if (type == NodeType::INTERNAL)
             return remove_from_internal(*this, idx);
     }
     else
@@ -335,16 +335,18 @@ bool BTreeNode<T, B>::remove(const T& t) {
             // std::cout << "The key " << t << " is does not exist in the tree\n";
             return false;
         }
+        else if (type == NodeType::INTERNAL) {
+            bool flag = ((idx == n) ? true : false);
 
-        bool flag = ((idx == n) ? true : false);
+            if (edges[idx]->n < B - 1)
+                try_borrow_from_sibling(*this, idx);
 
-        if (edges[idx]->n < B - 1)
-            try_borrow_from_sibling(*this, idx);
+            if (flag && idx > n)
+                return edges[idx - 1]->remove(t);
+            else
+                return edges[idx]->remove(t);
 
-        if (flag && idx > n)
-            return edges[idx - 1]->remove(t);
-        else
-            return edges[idx]->remove(t);
+        }
     }
 
     // int idx = get_index(t);
@@ -497,7 +499,7 @@ template<typename T, size_t B>
 T BTreeNode<T, B>::borrow_from_successor(BTreeNode<T, B>& node, size_t edge) {
     // TODO
     BTreeNode<T, B>* cur = node.edges[edge + 1];
-    while (cur->type != NodeType::LEAF)
+    while (cur->type == NodeType::INTERNAL)
         cur = cur->edges[0];
 
     return cur->keys[0];
@@ -522,7 +524,7 @@ template<typename T, size_t B>
 T BTreeNode<T, B>::  borrow_from_predecessor(BTreeNode<T, B>& node, size_t edge) {
     // TODO
     BTreeNode<T, B>* cur = node.edges[edge];
-    while (cur->type != NodeType::LEAF)
+    while (cur->type == NodeType::INTERNAL)
         cur = cur->edges[cur->n];
 
     return cur->keys[cur->n - 1];
@@ -544,7 +546,7 @@ bool BTreeNode<T, B>::borrow_from_left(BTreeNode<T, B>& node, size_t edge) {
     for (int i = child->n - 1; i >= 0; --i)
         child->keys[i + 1] = child->keys[i];
 
-    if (child->type != NodeType::LEAF)
+    if (child->type == NodeType::INTERNAL)
     {
         for (int i = child->n; i >= 0; --i)
             child->edges[i + 1] = child->edges[i];
@@ -552,7 +554,7 @@ bool BTreeNode<T, B>::borrow_from_left(BTreeNode<T, B>& node, size_t edge) {
 
     child->keys[0] = node.keys[edge - 1];
 
-    if (child->type != NodeType::LEAF)
+    if (child->type == NodeType::INTERNAL)
         child->edges[0] = sibling->edges[sibling->n];
 
     node.keys[edge - 1] = sibling->keys[sibling->n - 1];
@@ -598,7 +600,7 @@ bool BTreeNode<T, B>::borrow_from_right(BTreeNode<T, B>& node, size_t edge) {
 
     child->keys[(child->n)] = node.keys[edge];
 
-    if (child->type != NodeType::LEAF)
+    if (child->type == NodeType::INTERNAL)
         child->edges[(child->n) + 1] = sibling->edges[0];
 
     node.keys[edge] = sibling->keys[0];
@@ -606,7 +608,7 @@ bool BTreeNode<T, B>::borrow_from_right(BTreeNode<T, B>& node, size_t edge) {
     for (int i = 1; i < sibling->n; ++i)
         sibling->keys[i - 1] = sibling->keys[i];
 
-    if (sibling->type != NodeType::LEAF)
+    if (sibling->type == NodeType::INTERNAL)
     {
         for (int i = 1; i <= sibling->n; ++i)
             sibling->edges[i - 1] = sibling->edges[i];
@@ -658,7 +660,7 @@ bool BTreeNode<T, B>::merge_children(BTreeNode<T, B> & node, size_t idx) {
     for (int i = 0; i < sibling->n; ++i)
         child->keys[i + B - 1] = sibling->keys[i];
 
-    if (child->type != NodeType::LEAF)
+    if (child->type == NodeType::INTERNAL)
     {
         for (int i = 0; i <= sibling->n; ++i)
             child->edges[i + B - 1] = sibling->edges[i];
