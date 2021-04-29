@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]) {
     BTree<int, 3> tree;
-    size_t N = 10;
+    size_t N = 100000;
 
     std::vector<int> xs, ys;
 
