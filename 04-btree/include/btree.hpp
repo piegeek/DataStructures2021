@@ -516,6 +516,7 @@ bool BTreeNode<T, B>::merge_children(BTreeNode<T, B> & node, size_t idx) {
     child->n += sibling->n + 1;
     node.n--;
 
+    sibling->edges.fill(nullptr);
     delete sibling;
     return true;
 
