@@ -334,13 +334,13 @@ bool BTreeNode<T, B>::remove(const T& t) {
             bool flag = ((idx == n) ? true : false);
             bool success;
             
+            if (edges[idx]->n < B)
+                try_borrow_from_sibling(*this, idx);
+            
             if (flag && idx > n)
                 success = edges[idx - 1]->remove(t);
             else
                 success = edges[idx]->remove(t);
-
-            if (edges[idx]->n < B - 1)
-                try_borrow_from_sibling(*this, idx);
 
             return success;
         }
@@ -362,14 +362,14 @@ template<typename T, size_t B>
 bool BTreeNode<T, B>::remove_from_internal(BTreeNode<T, B>&node, size_t idx) {
     int k = node.keys[idx];
 
-    if (node.edges[idx]->n >= B - 1)
+    if (node.edges[idx]->n >= B)
     {
         int pred = borrow_from_predecessor(node, idx);
         node.keys[idx] = pred;
         node.edges[idx]->remove(pred);
     }
 
-    else if (node.edges[idx + 1]->n >= B - 1)
+    else if (node.edges[idx + 1]->n >= B)
     {
         int succ = borrow_from_successor(node, idx);
         node.keys[idx] = succ;
@@ -398,10 +398,10 @@ void BTreeNode<T, B>::balance(BTreeNode<T, B>&node, size_t e) {
 template<typename T, size_t B>
 bool BTreeNode<T, B>::try_borrow_from_sibling(BTreeNode<T, B>&node, size_t e) {
     // TODO
-    if (e!= 0 && node.edges[e - 1]->n >= B - 1)
+    if (e!= 0 && node.edges[e - 1]->n >= B)
         borrow_from_left(node, e);
 
-    else if (e != node.n && node.edges[e + 1]->n >= B - 1)
+    else if (e != node.n && node.edges[e + 1]->n >= B)
         borrow_from_right(node, e);
 
     else
@@ -496,15 +496,15 @@ bool BTreeNode<T, B>::merge_children(BTreeNode<T, B> & node, size_t idx) {
     BTreeNode<T, B> *child = node.edges[idx];
     BTreeNode<T, B> *sibling = node.edges[idx + 1];
 
-    child->keys[B - 2] = node.keys[idx];
+    child->keys[B - 1] = node.keys[idx];
 
     for (int i = 0; i < sibling->n; ++i)
-        child->keys[i + B - 1] = sibling->keys[i];
+        child->keys[i + B] = sibling->keys[i];
 
     if (child->type == NodeType::INTERNAL)
     {
         for (int i = 0; i <= sibling->n; ++i)
-            child->edges[i + B - 1] = sibling->edges[i];
+            child->edges[i + B] = sibling->edges[i];
     }
 
     for (int i = idx + 1; i < node.n; ++i)
@@ -516,7 +516,7 @@ bool BTreeNode<T, B>::merge_children(BTreeNode<T, B> & node, size_t idx) {
     child->n += sibling->n + 1;
     node.n--;
 
-    // delete sibling;
+    delete sibling;
     return true;
 
 }
