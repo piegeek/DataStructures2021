@@ -25,7 +25,6 @@ int main(int argc, char *argv[]) {
         tree.insert(i);
 
     for (auto i : ys) {
-        std::cout << tree.format() << std::endl;
         tree.remove(i);
     }
 
