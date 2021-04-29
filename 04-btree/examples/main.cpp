@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]) {
     BTree<int, 3> tree;
-    size_t N = 100000;
+    size_t N = 50;
 
     std::vector<int> xs, ys;
 
@@ -23,6 +23,8 @@ int main(int argc, char *argv[]) {
 
     for (auto i : xs)
         tree.insert(i);
+
+    std::cout << tree.format() << std::endl;
 
     for (auto i : ys) {
         tree.remove(i);
