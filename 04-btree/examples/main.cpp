@@ -5,8 +5,8 @@
 #include "btree.hpp"
 
 int main(int argc, char *argv[]) {
-    BTree<int, 2> tree;
-    size_t N = 100'000;
+    BTree<int, 3> tree;
+    size_t N = 10;
 
     std::vector<int> xs, ys;
 
@@ -24,10 +24,14 @@ int main(int argc, char *argv[]) {
     for (auto i : xs)
         tree.insert(i);
 
-    for (auto i : ys)
+    for (auto i : ys) {
+        std::cout << tree.format() << std::endl;
         tree.remove(i);
+    }
 
-    // REQUIRE(tree.root->n == 0);
+    std::cout << tree.format() << std::endl;
+
+    std::cout << tree.root->n << std::endl;
     
     return 0;
 }
