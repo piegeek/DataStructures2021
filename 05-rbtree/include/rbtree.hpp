@@ -258,7 +258,7 @@ RBNode<T>* RBNode<T>::insert(std::unique_ptr<RBNode<T>>& n, const T& t) {
 
     if (t < val) {
         RBNode<T>* left = insert(n->left, t);
-        n->left.reset(left));
+        n->left.reset(left);
     }      
     else if (t > val) {
         RBNode<T>* right = insert(n->right, t);
