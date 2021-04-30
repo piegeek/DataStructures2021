@@ -257,19 +257,17 @@ RBNode<T>* RBNode<T>::insert(std::unique_ptr<RBNode<T>>& n, const T& t) {
     T val = n->key;
 
     if (t < val) {
-        RBNode<T>* left = insert(n->left, t);
-        n->left = std::unique_ptr<RBNode<T>>(left);
+        n->left.reset(insert(n->left, t));
     }      
     else if (t > val) {
-        RBNode<T>* right = insert(n->right, t);
-        n->right = std::unique_ptr<RBNode<T>>(right);
+        n->right.reset(insert(n->right, t));
     }
     else return n.get();
 
     // Balance
-    // if (!is_red(n) && is_red(n->left) && is_red(n->right)) n->flip_color();
-    // if (!is_red(n->left) && is_red(n->right)) n.reset(rotate_left(n));
-    // if (is_red(n->left) && is_red(n->left->left)) n.reset(rotate_right(n));
+    if (!is_red(n) && is_red(n->left) && is_red(n->right)) n->flip_color();
+    if (!is_red(n->left) && is_red(n->right)) n.reset(rotate_left(n));
+    if (is_red(n->left) && is_red(n->left->left)) n.reset(rotate_right(n));
 
     return n.get();
 }
