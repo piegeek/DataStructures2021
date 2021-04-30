@@ -256,21 +256,21 @@ RBNode<T>* RBNode<T>::insert(std::unique_ptr<RBNode<T>>& n, const T& t) {
 
     T val = n->key;
 
-    std::unique_ptr<RBNode<T>> left;
-    std::unique_ptr<RBNode<T>> right;
+    // std::unique_ptr<RBNode<T>> left;
+    // std::unique_ptr<RBNode<T>> right;
 
     if (t < val) {
-        left.reset(insert(n->left, t));
+        RBNode<T>* left = insert(n->left, t);
         // n->left = std::move(left);
     }      
     else if (t > val) {
-        right.reset(insert(n->right, t));
+        RBNode<T>* right = insert(n->right, t);
         // n->right = std::move(right);
     }
     else return n.get();
 
-    if (left) n->left = std::move(left);
-    if (right) n->right = std::move(right);
+    // if (left) n->left = std::move(left);
+    // if (right) n->right = std::move(right);
 
     // Balance
     if (!is_red(n) && is_red(n->left) && is_red(n->right)) n->flip_color();
