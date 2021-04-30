@@ -226,10 +226,16 @@ void RBNode<T>::flip_color() {
 template<typename T>
 RBNode<T>* RBNode<T>::rotate_right(std::unique_ptr<RBNode<T>>& n) {
     // TODO
-    RBNode<T>* np = n->left.get();
-    n->left = std::move(n->left->right);
-    np->right = std::move(n);
-    n.reset(np);
+    // RBNode<T>* np = n->left.get();
+    // n->left = std::move(n->left->right);
+    // np->right = std::move(n);
+    // n.reset(np);
+
+    std::unique_ptr<RBNode<T>> m = std::move(n->left);
+    n->left = std::move(m->right);
+    m->right = std::move(n);
+
+    n = std::move(m);
 
     return n.release();
 }
@@ -273,7 +279,7 @@ RBNode<T>* RBNode<T>::insert(std::unique_ptr<RBNode<T>>& n, const T& t) {
     // Balance
     if (!is_red(n) && is_red(n->left) && is_red(n->right)) n->flip_color();
     if (!is_red(n->left) && is_red(n->right)) n.reset(rotate_left(n));
-    // if (is_red(n->left) && is_red(n->left->left)) n.reset(rotate_right(n));
+    if (is_red(n->left) && is_red(n->left->left)) n.reset(rotate_right(n));
 
     return n.release();
 }
