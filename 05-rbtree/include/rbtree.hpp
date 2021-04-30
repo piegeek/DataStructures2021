@@ -265,7 +265,7 @@ RBNode<T>* RBNode<T>::insert(std::unique_ptr<RBNode<T>>& n, const T& t) {
     else return n.release();
 
     // Balance
-    // if (!is_red(n) && is_red(n->left) && is_red(n->right)) n->flip_color();
+    if (!is_red(n) && is_red(n->left) && is_red(n->right)) n->flip_color();
     // if (!is_red(n->left) && is_red(n->right)) n.reset(rotate_left(n));
     // if (is_red(n->left) && is_red(n->left->left)) n.reset(rotate_right(n));
 
