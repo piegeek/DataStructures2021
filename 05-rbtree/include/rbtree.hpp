@@ -231,7 +231,7 @@ RBNode<T>* RBNode<T>::rotate_right(std::unique_ptr<RBNode<T>>& n) {
     np->right = std::move(n);
     n.reset(np);
 
-    return n.get();
+    return n.release();
 }
 
 template<typename T>
@@ -242,7 +242,7 @@ RBNode<T>* RBNode<T>::rotate_left(std::unique_ptr<RBNode<T>>& n) {
     np->left = std::move(n);
     n.reset(np);
 
-    return n.get();
+    return n.release();
 }
 
 template<typename T>
