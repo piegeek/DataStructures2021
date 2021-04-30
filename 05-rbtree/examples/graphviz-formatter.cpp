@@ -8,7 +8,7 @@
 int main(int argc, char *argv[]) {
     std::vector<int> xs{};
     RBTree<int> rbtree{};
-    size_t N = 99;
+    size_t N = 5;
 
     for (auto i = 1; i <= N; i++)
         xs.emplace_back(i);
