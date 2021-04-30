@@ -257,12 +257,12 @@ RBNode<T>* RBNode<T>::insert(std::unique_ptr<RBNode<T>>& n, const T& t) {
     T val = n->key;
 
     if (t < val) {
-        RBNode<T>* left = insert(n->left, t);
-        (n->left).reset(left);
+        std::unique_ptr<RBNode<T>> left(insert(n->left, t));
+        n->left = std::move(left);
     }      
     else if (t > val) {
-        RBNode<T>* right = insert(n->right, t);
-        (n->right).reset(right);
+        std::unique_ptr<RBNode<T>> right(insert(n->right, t));
+        n->right = std::move(right);
     }
     else return n.get();
 
