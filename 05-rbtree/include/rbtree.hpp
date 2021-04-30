@@ -251,7 +251,7 @@ RBNode<T>* RBNode<T>::insert(std::unique_ptr<RBNode<T>>& n, const T& t) {
     // If leaf node
     if (n == nullptr) {
         n = std::make_unique<RBNode<T>>(t);
-        return n.get();
+        return n.release();
     }
 
     T val = n->key;
@@ -269,7 +269,7 @@ RBNode<T>* RBNode<T>::insert(std::unique_ptr<RBNode<T>>& n, const T& t) {
     // if (!is_red(n->left) && is_red(n->right)) n.reset(rotate_left(n));
     // if (is_red(n->left) && is_red(n->left->left)) n.reset(rotate_right(n));
 
-    return n.get();
+    return n.release();
 }
 
 template<typename T>
