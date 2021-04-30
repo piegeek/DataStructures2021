@@ -226,19 +226,50 @@ void RBNode<T>::flip_color() {
 template<typename T>
 RBNode<T>* RBNode<T>::rotate_right(std::unique_ptr<RBNode<T>>& n) {
     // TODO
-    return nullptr;
+    RBNode<T>* np = n->left.get();
+    n->left = std::move(n->left->right);
+    np->right = std::move(n);
+    n.reset(np);
+
+    return n.get();
 }
 
 template<typename T>
 RBNode<T>* RBNode<T>::rotate_left(std::unique_ptr<RBNode<T>>& n) {
     // TODO
-    return nullptr;
+    RBNode<T>* np = n->right.get();
+    n->right = std::move(n->right->left);
+    np->left = std::move(n);
+    n.reset(np);
+
+    return n.get();
 }
 
 template<typename T>
 RBNode<T>* RBNode<T>::insert(std::unique_ptr<RBNode<T>>& n, const T& t) {
     // TODO
-    return nullptr;
+    // If leaf node
+    if (n == nullptr) {
+        n = std::make_unique<RBNode<T>>(t);
+        return n.get();
+    }
+
+    T val = n->key;
+
+    if (t < val) {
+        n->left.reset(insert(n->left, t));
+    }      
+    else if (t > val) {
+        n->right.reset(insert(n->right, t));
+    }
+    else return nullptr;
+
+    // Balance
+    if (!is_red(n) && is_red(n->left) && is_red(n->right)) n->flip_color();
+    if (is_red(n->right)) n.reset(rotate_left(n));
+    if (is_red(n->left) && is_red(n->left->left)) n.reset(rotate_right(n));
+
+    return n.get();
 }
 
 template<typename T>
