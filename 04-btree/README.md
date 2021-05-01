@@ -1,6 +1,6 @@
 # HW #4: B-tree
 
-* **Due data: 11:59pm, 5/9/2020**
+* **Due data: 11:59pm, 5/16/2020**
 
 ## Goals
 
