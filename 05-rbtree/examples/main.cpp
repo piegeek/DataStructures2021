@@ -34,7 +34,21 @@ int main(int argc, char *argv[]) {
     rbtree.insert(4);
     rbtree.insert(2);
     rbtree.insert(5);
+    rbtree.insert(7);
+    rbtree.insert(6);
+    rbtree.insert(8);
 
+    std::cout << rbtree << std::endl;
+
+    rbtree.remove(2);
+    std::cout << rbtree << std::endl;
+    rbtree.remove(1);
+    std::cout << rbtree << std::endl;
+    rbtree.remove(3);
+    std::cout << rbtree << std::endl;
+    rbtree.remove(5);
+    std::cout << rbtree << std::endl;
+    rbtree.remove(4);
     std::cout << rbtree << std::endl;
 
     return 0;
