@@ -234,6 +234,7 @@ RBNode<T>* RBNode<T>::rotate_right(std::unique_ptr<RBNode<T>>& n) {
     // n->left = std::move(n->left->right);
     // np->right = std::move(n);
     // n.reset(np);
+    if (!n) return nullptr;
 
     std::unique_ptr<RBNode<T>> m = std::move(n->left);
     n->left = std::move(m->right);
