@@ -73,6 +73,10 @@ struct RBNode {
 
     static RBNode* remove_max(std::unique_ptr<RBNode>&);
     static RBNode* remove_min(std::unique_ptr<RBNode>&);
+    
+    // CUSTOM
+    static RBNode* min_node(std::unique_ptr<RBNode>&);
+
     static RBNode* remove(std::unique_ptr<RBNode>&, const T&);
 
     static RBNode* insert(std::unique_ptr<RBNode>&, const T&);
@@ -365,6 +369,13 @@ RBNode<T>* RBNode<T>::remove_min(std::unique_ptr<RBNode<T>>& n) {
 }
 
 template<typename T>
+RBNode<T>* RBNode<T>::min_node(std::unique_ptr<RBNode<T>>& n) {
+    // [REF] https://stackoverflow.com/questions/37492768/inserting-element-into-left-leaning-black-red-tree-c
+    if (n->left == nullptr) return n.release();
+    return min_node(n->left);
+}
+
+template<typename T>
 RBNode<T>* RBNode<T>::remove(std::unique_ptr<RBNode<T>>& n, const T& t) {
     // TODO
     if (n == nullptr) {
@@ -380,9 +391,6 @@ RBNode<T>* RBNode<T>::remove(std::unique_ptr<RBNode<T>>& n, const T& t) {
 
         n->left.reset(remove(n->left, t));
     }
-    // else if (t > val) {
-    //     n->right.reset(remove(n->right, t));
-    // }
     else {
         if (is_red(n->left)) n.reset(rotate_right(n));
 
@@ -391,7 +399,8 @@ RBNode<T>* RBNode<T>::remove(std::unique_ptr<RBNode<T>>& n, const T& t) {
         if (!is_red(n->right) && !is_red(n->right->left)) n.reset(move_red_right(n));
 
         if (t == val) {
-            n->key = n->right->key;
+            RBNode<T>* mn = min_node(n->right);
+            n->key = mn->key;
             n->right.reset(remove_min(n->right));
         }
         else {
