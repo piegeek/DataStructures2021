@@ -378,9 +378,9 @@ RBNode<T>* RBNode<T>::min_node(std::unique_ptr<RBNode<T>>& n) {
 template<typename T>
 RBNode<T>* RBNode<T>::remove(std::unique_ptr<RBNode<T>>& n, const T& t) {
     // TODO
-    // if (n == nullptr) {
-    //     return nullptr;
-    // }
+    if (n == nullptr) {
+        return nullptr;
+    }
 
     T val = n->key;
 
