@@ -394,7 +394,10 @@ RBNode<T>* RBNode<T>::remove(std::unique_ptr<RBNode<T>>& n, const T& t) {
     else {
         if (n && is_red(n->left)) n.reset(rotate_right(n));
 
-        if (t == val && n->right == nullptr) return nullptr;
+        if (t == val && n->right == nullptr) {
+            n.reset(nullptr);
+            return nullptr;
+        }
 
         if (n && n->right && !is_red(n->right) && !is_red(n->right->left)) n.reset(move_red_right(n));
 
