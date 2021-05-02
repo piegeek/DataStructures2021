@@ -336,7 +336,7 @@ template<typename T>
 RBNode<T>* RBNode<T>::remove_max(std::unique_ptr<RBNode<T>>& n) {
     // TODO
     if (n && is_red(n->left)) n.reset(rotate_right(n));
-    if (n->right == nullptr) return nullptr;
+    if (!n || n->right == nullptr) return nullptr;
     if (n && n->right && !is_red(n->right) && !is_red(n->right->left)) n.reset(move_red_right(n));
 
     n->left.reset(remove_max(n->left));
