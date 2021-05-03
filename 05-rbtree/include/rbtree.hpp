@@ -314,9 +314,9 @@ std::pair<RBNode<T>*, Path> RBNode<T>::search(const T& t, Path sp) {
 template<typename T>
 RBNode<T>* RBNode<T>::fix_up(std::unique_ptr<RBNode<T>>& n) {
     // TODO
-    if (n && !is_red(n) && is_red(n->left) && is_red(n->right)) n->flip_color();
     if (n && !is_red(n->left) && is_red(n->right)) n.reset(rotate_left(n));
     if (n && n->left && is_red(n->left) && is_red(n->left->left)) n.reset(rotate_right(n));
+    if (n && !is_red(n) && is_red(n->left) && is_red(n->right)) n->flip_color();
     
     return n.release();
 }
