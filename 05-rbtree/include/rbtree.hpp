@@ -322,7 +322,7 @@ template<typename T>
 RBNode<T>* RBNode<T>::move_red_right(std::unique_ptr<RBNode<T>>& n) {
     // TODO
     n->flip_color();
-    if (n->right && is_red(n->left->left)) {
+    if (n->left && is_red(n->left->left)) {
         n.reset(rotate_right(n));
         n->flip_color();
     }
