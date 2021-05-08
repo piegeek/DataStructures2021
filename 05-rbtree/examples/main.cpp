@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[]) {
     // std::vector<int> xs{};
-    RBTree<int> rbtree{};
+    // RBTree<int> rbtree{};
     // size_t N = 9;
 
     // for (auto i = 1; i <= N; i++)
@@ -29,27 +29,40 @@ int main(int argc, char *argv[]) {
     //               << "\tlen: " << p.len_
     //               << "\tblack: " << p.num_black_ << '\n';
 
-    rbtree.insert(1);
-    rbtree.insert(3);
-    rbtree.insert(4);
-    rbtree.insert(2);
-    rbtree.insert(5);
-    rbtree.insert(7);
-    rbtree.insert(6);
-    rbtree.insert(8);
+    RBTree<int> rbtree;
+    size_t n = 10;
 
-    std::cout << rbtree << std::endl;
+    std::vector<int> xs;
 
-    rbtree.remove(2);
-    std::cout << rbtree << std::endl;
-    rbtree.remove(1);
-    std::cout << rbtree << std::endl;
-    rbtree.remove(3);
-    std::cout << rbtree << std::endl;
-    rbtree.remove(5);
-    std::cout << rbtree << std::endl;
-    rbtree.remove(4);
-    std::cout << rbtree << std::endl;
+    for (auto i = 0; i < n; i++)
+        xs.emplace_back(i);
+
+    std::random_device rd;
+    std::mt19937 g(rd());
+
+    std::shuffle(xs.begin(), xs.end(), g);
+
+    for (auto x : xs)
+        rbtree.insert(x);
+
+    std::cout << rbtree.format_graphviz() << std::endl;
+
+    for (auto j = 0; j < xs.size(); j++) {
+        if (j > xs[j]) {
+            std::cout << rbtree.format_graphviz() << std::endl;
+
+            std:: cout << rbtree.contains(xs[j]) << std::endl;
+            rbtree.remove(xs[j]);
+            std::cout << rbtree.contains(xs[j]) << std::endl;
+
+            // auto is_left_lean = test_left_lean(rbtree);
+            // REQUIRE(is_left_lean);
+
+            // auto is_black_balance = test_black_balance(rbtree);
+            // REQUIRE(is_black_balance);
+        }
+
+    }
 
     return 0;
 }
