@@ -84,7 +84,9 @@ common interfaces for a hash table.
   failed to insert or 2) if the same key already exists in the hash
   table. Othewrise, it returns the number of probes that have been
   preformed to locate the corresponding slot (which has the same
-  `key`).
+  `key`). Note that if you had to enlarge the table, `put()` returns
+  the number of probes that have been performed before enlarging the
+  table.
   
 * `int HashTable::remove(const K &key)`: It removes the slot with
   `key` from the hash table. It returns -1 if it failed to
@@ -106,8 +108,8 @@ common interfaces for a hash table.
   `QuadProbeHashTable::get_next_pos()`.
 
 * `void HashTable::enlarge_table()`: Our hash table requires that its
-  table size is doubled if its load factor is equal to or greater than
-  0.5. You will need to implement such a dynamic grow feature in this
+  table size is doubled if its load factor is greater than 0.5. You
+  will need to implement such a dynamic grow feature in this
   `HashTable::enlarge_table()` function. You will also accordingly
   check the load factor after every `HashTable::put()` operation,
   which invokes `HashTable::enlarge_table()` if needed.
