@@ -50,7 +50,7 @@ statement as well.
 ## Provided Classes
 
 Two major classes are provided to implement hash tables: `HashTable`
-and `HashSlot`. Another important class would be `DefaultHash`,
+and `HashSlot`. Another important class would be `DefaultHashFunc`,
 implementing hash functions.
 
 ### Template Types
@@ -60,15 +60,12 @@ classes use the following type convention.
 
 * `typename K` denotes the type of the key.
 * `typename V` denotes the type of the value.
-* `typename F` denotes the type of the hash function class.
 
 Note that while the design of our hash table is very generic (i.e., it
 can handle general types of keys and values as well as custom-designed
 hash functions), our tests do not fully utilize such a generic
 feature. Specifically, our current test mostly utilize `int` type for
-`K`, and `std::string` type for `V`. The hash function `F` only uses
-`DefaultHash`, where its integer hash function is simply an identify
-function.
+`K`, and `std::string` type for `V`. 
 
 ### Class HashTable
 
@@ -141,12 +138,12 @@ represents that the corresponding `HashSlot` is removed so when
 searching for a certain key, this removed `HashSlot` should be used as
 a condition to stop the search.
 
-### Class DefaultHash
+### Class DefaultHashFunc
 
-`DefaultHash` implements a default hash function. See how it overries
-the `operator()` in `hash_funcs.hpp`. Check the current integer hash
-function is a simple identify function (i.e., return the key as it is)
-and the current string hash function sums up all the character values.
+`DefaultHashFunc` implements a default hash function. Note that the
+current integer hash function is a simple identify function (i.e.,
+return the key as it is) and the current string hash function sums up
+all the character values.
 
 While such a use of hash functions are not ideal (we discussed in
 class that using such a naive hash function is not the best), you
