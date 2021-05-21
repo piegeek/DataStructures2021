@@ -46,10 +46,13 @@ int main() {
     HashFunc *hash_func = new DefaultHashFunc;
 
     LinearIntStrHt linear_basic_ht(hash_func);
-    basic_test<LinearIntStrHt>(linear_basic_ht);
+    // basic_test<LinearIntStrHt>(linear_basic_ht);
+    linear_basic_ht.put(1, std::to_string(3));
+    linear_basic_ht.put(2, std::to_string(7));
+    linear_basic_ht.put(3, std::to_string(4));
 
     QuadIntStrHt quad_basic_ht(hash_func);
-    basic_test<QuadIntStrHt>(quad_basic_ht);
+    // basic_test<QuadIntStrHt>(quad_basic_ht);
     
     delete hash_func;
 
