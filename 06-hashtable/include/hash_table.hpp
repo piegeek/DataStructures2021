@@ -118,9 +118,9 @@ int HashTable<K, V>::get(const K &key, V &value) {
 template <typename K, typename V>
 int HashTable<K, V>::put(const K &key, const V &value) {
     // TODO
-    // unsigned long pos = get_pos(key);
-    // unsigned long next_pos = pos;
-    // int num_of_probe = 1;
+    unsigned long pos = get_pos(key);
+    unsigned long next_pos = pos;
+    int num_of_probe = 1;
 
     // while (true) {
     //     if (table[next_pos].get_key() == key) num_of_probe = -1;
@@ -144,7 +144,11 @@ int HashTable<K, V>::put(const K &key, const V &value) {
     bool flag = false;
 
     // Find next free space
-    while (!table[hash_idx].is_empty() && !table[hash_idx].is_removed() && table[hash_idx].get_key() != key) {
+    while (!table[hash_idx].is_empty() && !table[hash_idx].is_removed()) {
+        if (step - 1 > table_size) return -1;
+        if (table[hash_idx].get_key() == key) {
+            break;
+        }
         hash_idx = get_next_pos(get_pos(key), step);
         step++;
     }
@@ -184,6 +188,7 @@ int HashTable<K, V>::remove(const K &key) {
     bool flag = false;
 
     while (!table[hash_idx].is_empty()) {
+        if (step - 1 > table_size) return -1;
         // Node found
         if (table[hash_idx].get_key() == key) {
             table[hash_idx].set_removed();
