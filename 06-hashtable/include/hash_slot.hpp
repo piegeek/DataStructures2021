@@ -21,6 +21,8 @@ public:
         // TODO
         _key = key;
         _value = value;
+        _empty = false;
+        _removed = false;
     }
 
     bool is_empty() const {
