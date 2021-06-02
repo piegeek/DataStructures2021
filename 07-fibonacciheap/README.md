@@ -1,6 +1,7 @@
 # HW#7: Fibonacci Heap
 
-* **Due date: 11:59pm, 06/16/2021**
+* **Due date: 11:59pm, 06/21/2021 (NO LATE SUBMISSION)**
+* **NOTE**: We DO NOT ACCEPT the late submission for this assignment.
 
 ## Goals
 
