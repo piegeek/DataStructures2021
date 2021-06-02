@@ -303,12 +303,6 @@ inputs, we encourage you to run the tests multiple times.  Moreover,
 we strongly encourage you to write your own additional tests, which
 check corner cases and thus make your code robust.
 
-### Delay Submission
-
-We allow five days of the late submission. There will be a 10% penalty
-from the total score per day (50% penalty at max). If your
-submission is delayed more than 5 days, you will get 0 points.
-
 ## Submission
 
 ### Testing your own programs
