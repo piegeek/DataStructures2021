@@ -163,10 +163,20 @@ TEST_CASE("Random Insertion and Extraction", "[Integer]") {
             inserted.emplace_back(v);
             heap.insert(v);
         }
+        // TODO:REMOVE
+        std::cout << "inserted" << std::endl;
+        for (auto i : inserted) {
+            std::cout << i << std::endl;
+        }
 
         for(size_t k = 0 ; k < num_ext ; ++k) {
             int ext = heap.extract_min().value();
             extracted.emplace_back(ext);
+        }
+        // TODO:REMOVE
+        std::cout << "extracted" << std::endl;
+        for (auto i : extracted) {
+            std::cout << i << std::endl;
         }
 
 
