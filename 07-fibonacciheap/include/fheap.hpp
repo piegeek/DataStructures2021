@@ -277,7 +277,8 @@ void FibonacciHeap<T>::consolidate() {
 
             if (y == min_node) min_node = x; // x has to be new min_node because y is going to be the child after merge
             merge(y, x); // y is child of x
-            
+            if (x->right == x) min_node = x;
+
             degree_arr[deg] = nullptr;
             deg = (deg + 1) % arr_size;
         }
