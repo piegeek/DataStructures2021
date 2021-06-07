@@ -275,7 +275,7 @@ void FibonacciHeap<T>::consolidate() {
                 std::swap(x, y);
             }
 
-            merge(y, x);
+            merge(x, y);
             degree_arr[deg] = nullptr;
             deg = (deg + 1) % arr_size;
         }
