@@ -258,7 +258,7 @@ void FibonacciHeap<T>::consolidate() {
     // TODO
 
     const double phi = 1.61803398875;
-    size_t arr_size = std::floor(std::log(size()) / std::log(phi)) + 2;
+    size_t arr_size = std::floor(std::log(size()) / std::log(2));
     std::vector<std::shared_ptr<FibonacciNode<T>>> degree_arr(arr_size);
 
     for (auto& ptr : degree_arr) ptr = nullptr;
