@@ -257,64 +257,64 @@ template <typename T>
 void FibonacciHeap<T>::consolidate() {
     // TODO
 
-    const double phi = 1.61803398875;
-    size_t arr_size = std::floor(std::log(size()) / std::log(2));
-    std::vector<std::shared_ptr<FibonacciNode<T>>> degree_arr(arr_size);
+    // const double phi = 1.61803398875;
+    // size_t arr_size = std::floor(std::log(size()) / std::log(phi));
+    // std::vector<std::shared_ptr<FibonacciNode<T>>> degree_arr(arr_size);
 
-    for (auto& ptr : degree_arr) ptr = nullptr;
-
-    std::shared_ptr<FibonacciNode<T>> np = min_node;
-
-    do {
-        std::shared_ptr<FibonacciNode<T>> x = np;
-        size_t deg = x->degree;
-
-        while(degree_arr[deg]) {
-            std::shared_ptr<FibonacciNode<T>> y = degree_arr[deg];
-            if (x->key > y->key) {
-                std::swap(x, y);
-            }
-
-            if (y == min_node) min_node = x; // x has to be new min_node because y is going to be the child after merge
-            merge(y, x); // y is child of x
-            if (x->right == x) min_node = x;
-
-            degree_arr[deg] = nullptr;
-            deg = (deg + 1) % arr_size;
-        }
-        degree_arr[deg] = x;
-        np = np->right;
-    } while (np != min_node);
-
-    min_node = nullptr;
-    
-    // const size_t degree_arr_size = std::floor(std::log(size()) / std::log(phi)) + 2;
-    // size_t deg;
-
-    // std::vector<std::shared_ptr<FibonacciNode<T>>> degree_arr(degree_arr_size);
+    // for (auto& ptr : degree_arr) ptr = nullptr;
 
     // std::shared_ptr<FibonacciNode<T>> np = min_node;
+
     // do {
-    //     deg = np->degree;
+    //     std::shared_ptr<FibonacciNode<T>> x = np;
+    //     size_t deg = x->degree;
 
-    //     while (degree_arr[deg]) {
-    //         std::shared_ptr<FibonacciNode<T>> t = degree_arr[deg];
-
-    //         if (np->key > t->key) {
-    //            std::shared_ptr<FibonacciNode<T>> temp = np; 
-    //            np = t;
-    //            t = temp;
+    //     while(degree_arr[deg]) {
+    //         std::shared_ptr<FibonacciNode<T>> y = degree_arr[deg];
+    //         if (x->key > y->key) {
+    //             std::swap(x, y);
     //         }
-    //         if (t == min_node) min_node = np;
-    //         merge(t, np);
-    //         if (np->right == np) min_node = np;
+
+    //         if (y == min_node) min_node = x; // x has to be new min_node because y is going to be the child after merge
+    //         merge(y, x); // y is child of x
+    //         if (x->right == x) min_node = x;
 
     //         degree_arr[deg] = nullptr;
-    //         deg++;
+    //         deg = (deg + 1) % arr_size;
     //     }
-    //     degree_arr[deg] = np;
+    //     degree_arr[deg] = x;
     //     np = np->right;
     // } while (np != min_node);
+
+    // min_node = nullptr;
+    
+    const size_t degree_arr_size = std::floor(std::log(size()) / std::log(phi)) + 2;
+    size_t deg;
+
+    std::vector<std::shared_ptr<FibonacciNode<T>>> degree_arr(degree_arr_size);
+
+    std::shared_ptr<FibonacciNode<T>> np = min_node;
+    do {
+        deg = np->degree;
+
+        while (degree_arr[deg]) {
+            std::shared_ptr<FibonacciNode<T>> t = degree_arr[deg];
+
+            if (np->key > t->key) {
+               std::shared_ptr<FibonacciNode<T>> temp = np; 
+               np = t;
+               t = temp;
+            }
+            if (t == min_node) min_node = np;
+            merge(t, np);
+            if (np->right == np) min_node = np;
+
+            degree_arr[deg] = nullptr;
+            deg++;
+        }
+        degree_arr[deg] = np;
+        np = np->right;
+    } while (np != min_node);
 
     min_node = nullptr;
 
