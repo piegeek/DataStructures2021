@@ -92,6 +92,9 @@ only one pointer, which points to the node that contains the minimum
 element (which is called `node_min`).
 
 ## Basic Operations
+### Notice
+In this assignment, there is no duplicate key input. In other words,
+you can assume all of the keys are distinct.
 
 ### Insert
 
@@ -288,7 +291,7 @@ This class has the following functions:
 * `bool empty() const` : Return true if the heap is empty, false otherwise.
 * `size_t size() const` : Return the number of nodes that the heap contains.
 * `void consolidate()` : Consolidate the root list of the heap.
-* `void merge(std::shared_ptr<FibonacciNode<T>>& x, std::shared_ptr<FibonacciNode<T>>& y)` : Make `y` as a child of `x`. You will accordingly need to change the degree of `x`.
+* `void merge(std::shared_ptr<FibonacciNode<T>>& x, std::shared_ptr<FibonacciNode<T>>& y)` : Make `y` as a child of `x`. You will accordingly need to change the degree of `x`. Also, change the `y.mark` if you needed.
 
 
 ## Goal & Grading
