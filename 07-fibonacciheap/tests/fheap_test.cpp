@@ -22,10 +22,8 @@ void traverse_root_list(FibonacciNode<T>* min_node) {
     }
     while(!root_key.empty()) {
         T item = root_key.front();
-        std::cout << item << " ";
         root_key.pop();
     }
-    std::cout << std::endl;
 }
 
 template <typename T>
@@ -91,15 +89,29 @@ TEST_CASE("Insertion", "[Integer]") {
     }
 
     SECTION("After Several Insertions") {
-        for(int i = 0 ; i < 10 ; ++i) {
-            int temp = rand() % 100;
-            heap.insert(temp);
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::uniform_int_distribution<size_t> dis(0,1000);
+        size_t num_ins = 10;
+
+        for(int i = 0 ; i < num_ins ; ++i) {
+            int temp = dis(g);
             inserted.push_back(temp);
         }
+
+        std::sort(inserted.begin(), inserted.end());
+        inserted.erase(std::unique(inserted.begin(), inserted.end()), inserted.end());
+        std::shuffle(inserted.begin(), inserted.end(), g);
+        num_ins = inserted.size();
+
+        for(int i = 0 ; i < num_ins ; ++i) {
+            heap.insert(inserted[i]);
+        }
+
         int min_value = *std::min_element(inserted.begin(), inserted.end());
         REQUIRE(heap.get_min().value() == min_value);
         REQUIRE(heap.is_empty() == false);
-        REQUIRE(heap.size() == 10);
+        REQUIRE(heap.size() == num_ins);
     }
 }
 
@@ -141,19 +153,17 @@ TEST_CASE("Simple Extraction", "[Integer]") {
 }
 
 TEST_CASE("Random Insertion and Extraction", "[Integer]") {
-    FibonacciHeap<int> heap;
-    std::vector<int> inserted;
-    std::vector<int> extracted;
     size_t N = 10;
-    // Prepare a random vector
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::uniform_int_distribution<size_t> dis_ins(200,500);
-    std::uniform_int_distribution<size_t> dis_ext(100, 200);
-    std::uniform_int_distribution<size_t> dis_key(0, 10000);
-
     for(size_t i = 0 ; i < N; ++i) {
-        extracted.clear();
+        FibonacciHeap<int> heap;
+        std::vector<int> inserted;
+        std::vector<int> extracted;
+        // Prepare a random vector
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::uniform_int_distribution<size_t> dis_ins(200,500);
+        std::uniform_int_distribution<size_t> dis_ext(100, 200);
+        std::uniform_int_distribution<size_t> dis_key(0, 10000);
 
         size_t num_ins = dis_ins(g);
         size_t num_ext = dis_ext(g);
@@ -161,7 +171,18 @@ TEST_CASE("Random Insertion and Extraction", "[Integer]") {
         for(size_t j = 0 ; j < num_ins ; ++j) {
             int v = dis_key(g);
             inserted.emplace_back(v);
-            heap.insert(v);
+        }
+
+        std::sort(inserted.begin(), inserted.end());
+        inserted.erase(std::unique(inserted.begin(), inserted.end()), inserted.end());
+        std::shuffle(inserted.begin(), inserted.end(), g);
+        num_ins = inserted.size();
+
+        if(num_ins < num_ext)
+            continue;
+
+        for(size_t j = 0 ; j < num_ins ; ++j) {
+            heap.insert(inserted[j]);
         }
         // TODO:REMOVE
         std::cout << "inserted" << std::endl;
@@ -195,67 +216,46 @@ TEST_CASE("Random Insertion and Extraction", "[Integer]") {
             degree_map[root->degree] = true;
         }
     }
-
 }
 
-void decrease_key_simple_test1(void) {
+void decrease_key_simple_test(void) {
     // 2 - 3 - 5 - 7 - 9
     FibonacciHeap<int> heap = {2, 3, 5, 7, 9};
 
-    // 1 - 3 - 5 - 7 - 9
+    // 1 - 2 - 5 - 7 - 9
     heap.decrease_key(3, 1);
 
     REQUIRE(heap.get_min().value() == 1);
 }
 
-void decrease_key_simple_test2(void) {
-    // 2 - 3 - 5 - 7 - 9 - 11
-    FibonacciHeap<int> heap = {2, 3, 5, 7, 9, 11};
-    std::vector<int> ans = {3, 6, 11};
-
-
-    // 3 - 11
-    // /\ 
-    // 5 7
-    //   /
-    //  9
-    heap.extract_min();
-
-    // 3 - 11 - 6
-    // /\ 
-    // 5 7
-    heap.decrease_key(9, 6);
-
-    std::vector<FibonacciNode<int>*> root_list = get_root_list(heap);
-    std::vector<int> root_values; 
-    for(auto node : root_list){
-        root_values.emplace_back(node->key);
-    }
-
-    std::sort(root_values.begin(), root_values.end());
-    
-    for(auto i = 0 ; i < 3 ; i++)
-        REQUIRE(ans[i] == root_values[i]);
-}
-
 void decrease_key_random_test(void) {
-    FibonacciHeap<int> heap;
-    std::vector<int> inserted;
     size_t N = 10;
     size_t num_dec = 10;
-    // Prepare a random vector
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::uniform_int_distribution<size_t> dis_ins(200,500);
-    std::uniform_int_distribution<size_t> dis_key(0, 10000);
 
     for(size_t i = 0 ; i < N; ++i) {
+        FibonacciHeap<int> heap;
+        std::vector<int> inserted;
+        // Prepare a random vector
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::uniform_int_distribution<size_t> dis_ins(200,500);
+        std::uniform_int_distribution<size_t> dis_key(0, 10000);
+
         size_t num_ins = dis_ins(g);
 
         for(size_t j = 0 ; j < num_ins ; ++j) {
             int v = dis_key(g);
-            heap.insert(v*2 + 2);
             inserted.emplace_back(v*2 + 2);
+        }
+
+        std::sort(inserted.begin(), inserted.end());
+        inserted.erase(std::unique(inserted.begin(), inserted.end()), inserted.end());
+        std::shuffle(inserted.begin(), inserted.end(), g);
+        num_ins = inserted.size();
+
+
+        for(size_t j = 0 ; j < num_ins ; ++j) {
+            heap.insert(inserted[j]);
         }
 
         heap.extract_min();
@@ -290,7 +290,6 @@ void decrease_key_random_test(void) {
 }
 
 TEST_CASE("decrease key", "[fheap]") {
-    decrease_key_simple_test1();
-    decrease_key_simple_test2();
+    decrease_key_simple_test();
     decrease_key_random_test();
 }

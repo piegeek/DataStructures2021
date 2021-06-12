@@ -1,6 +1,7 @@
 # HW#7: Fibonacci Heap
 
-* **Due date: 11:59pm, 06/16/2021**
+* **Due date: 11:59pm, 06/21/2021 (NO LATE SUBMISSION)**
+* **NOTE**: We DO NOT ACCEPT the late submission for this assignment.
 
 ## Goals
 
@@ -91,6 +92,9 @@ only one pointer, which points to the node that contains the minimum
 element (which is called `node_min`).
 
 ## Basic Operations
+### Notice
+In this assignment, there is no duplicate key input. In other words,
+you can assume all of the keys are distinct.
 
 ### Insert
 
@@ -287,7 +291,7 @@ This class has the following functions:
 * `bool empty() const` : Return true if the heap is empty, false otherwise.
 * `size_t size() const` : Return the number of nodes that the heap contains.
 * `void consolidate()` : Consolidate the root list of the heap.
-* `void merge(std::shared_ptr<FibonacciNode<T>>& x, std::shared_ptr<FibonacciNode<T>>& y)` : Make `y` as a child of `x`. You will accordingly need to change the degree of `x`.
+* `void merge(std::shared_ptr<FibonacciNode<T>>& x, std::shared_ptr<FibonacciNode<T>>& y)` : Make `y` as a child of `x`. You will accordingly need to change the degree of `x`. Also, change the `y.mark` if you needed.
 
 
 ## Goal & Grading
@@ -301,12 +305,6 @@ written in `tests/fheap_test.hpp`.  Since some tests involve random
 inputs, we encourage you to run the tests multiple times.  Moreover,
 we strongly encourage you to write your own additional tests, which
 check corner cases and thus make your code robust.
-
-### Delay Submission
-
-We allow five days of the late submission. There will be a 10% penalty
-from the total score per day (50% penalty at max). If your
-submission is delayed more than 5 days, you will get 0 points.
 
 ## Submission
 
