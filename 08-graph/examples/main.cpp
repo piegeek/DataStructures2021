@@ -11,6 +11,7 @@
 
 int main(int argc, char *argv[]) {
     edges_t edges = {{0, 1, 1.0f}, {1, 2, 2.0f}};
-    Graph(3, edges, GraphType::DIRECTED);
-    return 0;
+    Graph graph(3, edges, GraphType::DIRECTED);
+
+    // graph.print_graph();
 }
