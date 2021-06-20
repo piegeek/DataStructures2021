@@ -10,14 +10,18 @@
 #include "prim_minimum_spanning_tree.hpp"
 
 int main(int argc, char *argv[]) {
-    edges_t edges = {{0, 1, 1.0f}, {1, 2, 2.0f}};
-    Graph graph(3, edges, GraphType::DIRECTED);
+    edges_t dijkstra_edges1 = {{0, 1, 3.0f},
+                               {0, 2, 1.0f},
+                               {1, 2, 7.0f},
+                               {1, 3, 5.0f},
+                               {1, 4, 1.0f},
+                               {2, 3, 2.0f},
+                               {3, 4, 7.0f}};
 
-    graph.print_graph();
-
-    std::optional<edges_t> sorted = prim_minimum_spanning_tree(graph, 0);
-
-    for (auto s : sorted.value()) std::cout << std::get<2>(s) << std::endl;
-
+    Graph g1(5, dijkstra_edges1, GraphType::UNDIRECTED);
+    std::unordered_map<vertex_t,
+                       std::optional<std::tuple<vertex_t,
+                                                edge_weight_t>>> dijkstra_result
+        = dijkstra_shortest_path(g1, 2);
     return 0;
 }

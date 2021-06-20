@@ -31,7 +31,7 @@ vertex_t dj_min_distance(size_t V, vertex_t distance[], bool in[]) {
 std::unordered_map<vertex_t,
     std::optional<std::tuple<vertex_t, edge_weight_t>>>
 dijkstra_shortest_path(Graph& g, vertex_t src) {
-    size_t V = g.get_size();
+    const size_t V = g.get_size();
 
     std::unordered_map<vertex_t, std::optional<std::tuple<vertex_t, edge_weight_t>>> map;
     bool visited[V];
@@ -47,10 +47,8 @@ dijkstra_shortest_path(Graph& g, vertex_t src) {
     distance[src] = 0;
     parent[src] = -1;
 
-    vertex_t min;
-
     for (auto i = 0; i < V; i++) {
-        min = dj_min_distance(V, distance, visited);
+        vertex_t min = dj_min_distance(V, distance, visited);
 
         visited[min] = true;
 
