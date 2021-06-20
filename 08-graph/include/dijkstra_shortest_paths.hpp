@@ -14,7 +14,7 @@ vertex_t dj_min_distance(size_t V, vertex_t distance[], bool in[]) {
 	size_t min_index;
 
 	for (vertex_t v = 0; v < V; v++) {
-		if (!in[v] && distance[v] < min) {
+		if (!in[v] && distance[v] <= min) {
 			min = distance[v];
 			min_index = v;
 		}
@@ -62,7 +62,7 @@ dijkstra_shortest_path(Graph& g, vertex_t src) {
     }
 
     for (auto k = 0; k < V; k++) {
-        if (distance[k] == INF) {
+        if (visited[k] == false) {
             map[k] = std::nullopt;
         }
         else {

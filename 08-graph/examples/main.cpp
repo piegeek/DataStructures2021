@@ -23,5 +23,16 @@ int main(int argc, char *argv[]) {
                        std::optional<std::tuple<vertex_t,
                                                 edge_weight_t>>> dijkstra_result
         = dijkstra_shortest_path(g1, 2);
+
+    for(size_t i = 0 ; i < 5 ; ++i) {
+        if(i == 2)
+            continue;
+        std::cout << std::get<0>(dijkstra_result[i].value()) << std::endl;
+        std::cout << std::get<1>(dijkstra_result[i].value()) << std::endl;
+
+        // REQUIRE(
+        //     fabs(std::get<1>(dijkstra_result[i].value()) - dist_answer[i])
+        //     < std::numeric_limits<edge_weight_t>::epsilon());
+    }
     return 0;
 }
