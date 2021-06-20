@@ -7,6 +7,8 @@
 #include <tuple>
 
 /* Feel free to add more standard library headers */
+#include <limits>
+const size_t INF = std::numeric_limits<size_t>::max();
 
 // A vertex is typed as `vertex_t`. An edge is typed as `edge_t`,
 // which is associated with a source vertex, a destination vertex, and
@@ -52,10 +54,10 @@ class Graph {
             matrix_ = new edge_weight_t*[size_];
             for (auto i = 0; i < size_; i++) matrix_[i] = new edge_weight_t[size_];
 
-            // Initialize to 0
+            // Initialize to INF
             for (auto i = 0; i < size_; i++) {
                 for (auto j = 0; j < size_; j++) {
-                    matrix_[i][j] = 0;
+                    matrix_[i][j] = INF;
                 }
             }
 
@@ -92,7 +94,7 @@ class Graph {
             size_t indegree = 0;
 
             for (auto i = 0; i < size_; i++) {
-                if (matrix_[i][idx] != 0) indegree++;
+                if (matrix_[i][idx] != INF) indegree++;
             }
 
             return indegree;
@@ -103,12 +105,12 @@ class Graph {
 
             if (type_ == GraphType::DIRECTED) {
                 for (auto i = 0; i < get_size(); i++) {
-                    if (matrix_[vertex][i] != 0) neighbors.push_back(i);
+                    if (matrix_[vertex][i] != INF) neighbors.push_back(i);
                 }
             }
             if (type_ == GraphType::UNDIRECTED) {
                 for (auto i = 0; i < get_size(); i++) {
-                    if (matrix_[vertex][i] != 0) neighbors.push_back(i);
+                    if (matrix_[vertex][i] != INF) neighbors.push_back(i);
                 }
             }
 
